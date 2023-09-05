@@ -2,11 +2,13 @@ from __future__ import annotations
 
 from OpenGL.GL import *
 
+from manager.shader import ShaderManager
+
 import glfw
 
 def display() -> None:
 	""" Updates the display on every frame. """
-
+	
 	glClearColor(0.0, 0.0, 0.0, 1.0)
 	glClear(GL_COLOR_BUFFER_BIT)
 
@@ -30,6 +32,8 @@ def main() -> None:
 
 	# Enable v-sync
 	glfw.swap_interval(1)
+
+	shader_manager = ShaderManager()
 
 	# Update the window while it is not closed
 	while not glfw.window_should_close(window):
