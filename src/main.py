@@ -2,48 +2,75 @@ from __future__ import annotations
 
 from OpenGL.GL import *
 
-from manager.shader import ShaderManager
+from manager.shader_manager import ShaderManager
 
 import glfw
 
-def display() -> None:
-	""" Updates the display on every frame. """
-	
-	glClearColor(0.0, 0.0, 0.0, 1.0)
-	glClear(GL_COLOR_BUFFER_BIT)
+class App:
+	def __init__(self):
+		self.__shader_manager: ShaderManager
+		self.__window: GLFWWindow
 
-def main() -> None:
-	""" The main driver code. """
 
-	# Initialize glfw
-	if not glfw.init():
-		print("glfw failed to initialize!")
-		exit(1)
 
-	# Setup OpenGL hints and create the window
-	glfw.window_hint(glfw.CONTEXT_VERSION_MINOR, 4)
-	glfw.window_hint(glfw.CONTEXT_VERSION_MAJOR, 4)
-	glfw.window_hint(glfw.OPENGL_PROFILE, glfw.OPENGL_CORE_PROFILE)
+	def __display(self) -> None:
+		"""Updates the display on every frame."""
+		glPointSize(30)
+		glDrawArrays(GL_POINTS, 0, 1)
+		
+		# glClearColor(0.0, 0.0, 0.0, 1.0)
+		# glClear(GL_COLOR_BUFFER_BIT)
 
-	window = glfw.create_window(800, 800, "window", None, None)
+	def initialize(self) -> None:
+		self.__initialize_window()
+		self.__shader_manager = ShaderManager()
 
-	# Make the current context the application window 
-	glfw.make_context_current(window)
+	def __initialize_window(self) -> None:
+		"""The main driver code."""
 
-	# Enable v-sync
-	glfw.swap_interval(1)
+		# Initialize glfw
+		if not glfw.init():
+			print("glfw failed to initialize!")
+			exit(1)
 
-	shader_manager = ShaderManager()
+		# Setup OpenGL hints and create the window
+		glfw.window_hint(glfw.CONTEXT_VERSION_MINOR, 4)
+		glfw.window_hint(glfw.CONTEXT_VERSION_MAJOR, 4)
+		glfw.window_hint(glfw.OPENGL_PROFILE, glfw.OPENGL_CORE_PROFILE)
 
-	# Update the window while it is not closed
-	while not glfw.window_should_close(window):
-		display()
-		glfw.swap_buffers(window)
-		glfw.poll_events()
+		self.__window = glfw.create_window(800, 800, "window", None, None)
 
-	glfw.destroy_window(window)
-	glfw.terminate()
-	exit(0)
+		# Make the current context the application window 
+		glfw.make_context_current(self.__window)
+
+		# Enable v-sync
+		glfw.swap_interval(1)
+
+		# Generate the vertex array object
+		vao = GLuint()
+
+		glGenVertexArrays(1, vao)
+		glBindVertexArray(vao)
+
+	def run(self):
+		self.__shader_manager.use_shader_program()
+
+		# Update the window while it is not closed
+		while not glfw.window_should_close(self.__window):
+			self.__display()
+			glfw.swap_buffers(self.__window)
+			glfw.poll_events()
+
+		glfw.destroy_window(self.__window)
+		glfw.terminate()
+		exit(0)
 
 if __name__ == '__main__':
-	main()
+	# Create the driver code
+	app = App()
+
+	# Initialize the application
+	app.initialize()
+
+	# Run the application
+	app.run()
