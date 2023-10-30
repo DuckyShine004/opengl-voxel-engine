@@ -11,16 +11,6 @@ class App:
 		self.__shader_manager: ShaderManager
 		self.__window: GLFWWindow
 
-
-
-	def __display(self) -> None:
-		"""Updates the display on every frame."""
-		glPointSize(30)
-		glDrawArrays(GL_POINTS, 0, 1)
-		
-		# glClearColor(0.0, 0.0, 0.0, 1.0)
-		# glClear(GL_COLOR_BUFFER_BIT)
-
 	def initialize(self) -> None:
 		self.__initialize_window()
 		self.__shader_manager = ShaderManager()
@@ -52,12 +42,26 @@ class App:
 		glGenVertexArrays(1, vao)
 		glBindVertexArray(vao)
 
+	def __process_inputs(self) -> None:
+		if glfw.get_key(self.__window, glfw.KEY_ESCAPE) == glfw.PRESS:
+			glfw.set_window_should_close(self.__window, True)
+
+	def __display(self) -> None:
+		"""Updates the display on every frame."""
+		glPointSize(30)
+		glDrawArrays(GL_POINTS, 0, 1)
+		
+		# glClearColor(0.0, 0.0, 0.0, 1.0)
+		# glClear(GL_COLOR_BUFFER_BIT)
+
 	def run(self):
 		self.__shader_manager.use_shader_program()
 
 		# Update the window while it is not closed
 		while not glfw.window_should_close(self.__window):
 			self.__display()
+			self.__process_inputs()
+
 			glfw.swap_buffers(self.__window)
 			glfw.poll_events()
 
