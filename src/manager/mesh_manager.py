@@ -1,0 +1,3 @@
+class MeshManager:
+    def __init__(self):
+        ...

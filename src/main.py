@@ -1,80 +1,116 @@
+"""Summary."""
 from __future__ import annotations
+
+import ctypes
 
 from OpenGL.GL import *
 from glfw import *
 
 from manager.shader_manager import ShaderManager
+from shape.triangle import Triangle
+
 
 class App:
-	def __init__(self):
-		self.__shader_manager: ShaderManager
-		self.__window: GLFWWindow
 
-	def initialize(self) -> None:
-		self.__initialize_window()
-		self.__shader_manager = ShaderManager()
+    """Summary."""
 
-	def __initialize_window(self) -> None:
-		"""The main driver code."""
+    def __init__(self) -> None:
+        """Summary."""
+        self.__shader_manager: ShaderManager
+        self.__window: GLFWWindow
 
-		# Initialize glfw
-		if not init():
-			print("glfw failed to initialize!")
-			exit(1)
+    def initialize(self) -> None:
+        """Summary."""
+        self.__initialize_window()
+        self.__shader_manager = ShaderManager()
+        self.test()
 
-		# Setup OpenGL hints and create the window
-		window_hint(CONTEXT_VERSION_MINOR, 4)
-		window_hint(CONTEXT_VERSION_MAJOR, 4)
-		window_hint(OPENGL_PROFILE, OPENGL_CORE_PROFILE)
+    def __initialize_window(self) -> None:
+        """The main driver code."""
 
-		self.__window = create_window(800, 800, "window", None, None)
+        # Initialize glfw
+        if not init():
+            print("glfw failed to initialize!")
+            exit(1)
 
-		# Make the current context the application window 
-		make_context_current(self.__window)
+        # Setup OpenGL hints and create the window
+        window_hint(CONTEXT_VERSION_MINOR, 4)
+        window_hint(CONTEXT_VERSION_MAJOR, 4)
+        window_hint(OPENGL_PROFILE, OPENGL_CORE_PROFILE)
 
-		# Enable v-sync
-		swap_interval(1)
+        self.__window = create_window(800, 800, "window", None, None)
 
-		# Generate the vertex array object
-		vao = GLuint()
+        # Make the current context the application window
+        make_context_current(self.__window)
 
-		glGenVertexArrays(1, vao)
-		glBindVertexArray(vao)
+        # Enable v-sync
+        swap_interval(1)
 
-	def __process_inputs(self) -> None:
-		if get_key(self.__window, KEY_ESCAPE) == PRESS:
-			set_window_should_close(self.__window, True)
+    def test(self):
+        # Create a new instance of triangle
+        triangle = Triangle()
+        vertices = triangle.get_vertices()
 
-	def __display(self) -> None:
-		"""Updates the display on every frame."""
-		glPointSize(30)
-		glDrawArrays(GL_POINTS, 0, 1)
-		
-		# glClearColor(0.0, 0.0, 0.0, 1.0)
-		# glClear(GL_COLOR_BUFFER_BIT)
+        # Generate the vertex array object
+        vao = GLuint()
 
-	def run(self):
-		self.__shader_manager.use_shader_program()
+        glGenVertexArrays(1, vao)
+        glBindVertexArray(vao)
 
-		# Update the window while it is not closed
-		while not window_should_close(self.__window):
-			self.__process_inputs()
 
-			self.__display()
+        # Create the vertex buffer object
+        vbo = GLuint()
 
-			swap_buffers(self.__window)
-			poll_events()
+        # Generate buffers for OpenGL to use
+        glGenBuffers(1, vbo)
+        glBindBuffer(GL_ARRAY_BUFFER, vbo)
+        glBufferData(GL_ARRAY_BUFFER, vertices.nbytes, vertices, GL_STATIC_DRAW)
 
-		destroy_window(self.__window)
-		terminate()
-		exit(0)
+        # Setup the vertex attribute pointer
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * ctypes.sizeof(ctypes.c_float), ctypes.c_void_p(0))
+        glEnableVertexAttribArray(0)
 
-if __name__ == '__main__':
-	# Create the driver code
-	app = App()
+        # Use the shader program before rendering anything
+        self.__shader_manager.use_shader_program()
 
-	# Initialize the application
-	app.initialize()
+        glBindVertexArray(vao)
 
-	# Run the application
-	app.run()
+    def __process_inputs(self) -> None:
+        """Summary."""
+        if get_key(self.__window, KEY_ESCAPE) == PRESS:
+            set_window_should_close(self.__window, True)
+
+    def __display(self) -> None:
+        """Updates the display on every frame."""
+        glDrawArrays(GL_TRIANGLES, 0, 3)
+
+        # glClearColor(0.0, 0.0, 0.0, 1.0)
+        # glClear(GL_COLOR_BUFFER_BIT)
+
+    def run(self):
+        """Summary."""
+
+
+        # Update the window while it is not closed
+        while not window_should_close(self.__window):
+            self.__process_inputs()
+
+            self.__display()
+
+            swap_buffers(self.__window)
+            poll_events()
+
+        destroy_window(self.__window)
+        terminate()
+        exit(0)
+
+
+if __name__ == "__main__":
+    # Create the driver code
+    app = App()
+
+    # Initialize the application
+    app.initialize()
+
+    # Run the application
+    app.run()
