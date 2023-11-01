@@ -57,7 +57,6 @@ class App:
         glGenVertexArrays(1, vao)
         glBindVertexArray(vao)
 
-
         # Create the vertex buffer object
         vbo = GLuint()
 
@@ -73,8 +72,6 @@ class App:
         # Use the shader program before rendering anything
         self.__shader_manager.use_shader_program()
 
-        glBindVertexArray(vao)
-
     def __process_inputs(self) -> None:
         """Summary."""
         if get_key(self.__window, KEY_ESCAPE) == PRESS:
@@ -82,10 +79,11 @@ class App:
 
     def __display(self) -> None:
         """Updates the display on every frame."""
-        glDrawArrays(GL_TRIANGLES, 0, 3)
 
-        # glClearColor(0.0, 0.0, 0.0, 1.0)
         # glClear(GL_COLOR_BUFFER_BIT)
+        # glClearColor(0.0, 0.0, 0.0, 1.0)
+
+        glDrawArrays(GL_TRIANGLES, 0, 3)
 
     def run(self):
         """Summary."""
