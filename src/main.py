@@ -1,76 +1,114 @@
+"""Summary."""
 from __future__ import annotations
 
+import ctypes
+
 from OpenGL.GL import *
+from glfw import *
 
 from manager.shader_manager import ShaderManager
+from shape.triangle import Triangle
 
-import glfw
 
 class App:
-	def __init__(self):
-		self.__shader_manager: ShaderManager
-		self.__window: GLFWWindow
+
+    """Summary."""
+
+    def __init__(self) -> None:
+        """Summary."""
+        self.__shader_manager: ShaderManager
+        self.__window: GLFWWindow
+
+    def initialize(self) -> None:
+        """Summary."""
+        self.__initialize_window()
+        self.__shader_manager = ShaderManager()
+        self.test()
+
+    def __initialize_window(self) -> None:
+        """The main driver code."""
+
+        # Initialize glfw
+        if not init():
+            print("glfw failed to initialize!")
+            exit(1)
+
+        # Setup OpenGL hints and create the window
+        window_hint(CONTEXT_VERSION_MINOR, 4)
+        window_hint(CONTEXT_VERSION_MAJOR, 4)
+        window_hint(OPENGL_PROFILE, OPENGL_CORE_PROFILE)
+
+        self.__window = create_window(800, 800, "window", None, None)
+
+        # Make the current context the application window
+        make_context_current(self.__window)
+
+        # Enable v-sync
+        swap_interval(1)
+
+    def test(self):
+        # Create a new instance of triangle
+        triangle = Triangle()
+        vertices = triangle.get_vertices()
+
+        # Generate the vertex array object
+        vao = GLuint()
+
+        glGenVertexArrays(1, vao)
+        glBindVertexArray(vao)
+
+        # Create the vertex buffer object
+        vbo = GLuint()
+
+        # Generate buffers for OpenGL to use
+        glGenBuffers(1, vbo)
+        glBindBuffer(GL_ARRAY_BUFFER, vbo)
+        glBufferData(GL_ARRAY_BUFFER, vertices.nbytes, vertices, GL_STATIC_DRAW)
+
+        # Setup the vertex attribute pointer
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * ctypes.sizeof(ctypes.c_float), ctypes.c_void_p(0))
+        glEnableVertexAttribArray(0)
+
+        # Use the shader program before rendering anything
+        self.__shader_manager.use_shader_program()
+
+    def __process_inputs(self) -> None:
+        """Summary."""
+        if get_key(self.__window, KEY_ESCAPE) == PRESS:
+            set_window_should_close(self.__window, True)
+
+    def __display(self) -> None:
+        """Updates the display on every frame."""
+
+        # glClear(GL_COLOR_BUFFER_BIT)
+        # glClearColor(0.0, 0.0, 0.0, 1.0)
+
+        glDrawArrays(GL_TRIANGLES, 0, 3)
+
+    def run(self):
+        """Summary."""
 
 
+        # Update the window while it is not closed
+        while not window_should_close(self.__window):
+            self.__process_inputs()
 
-	def __display(self) -> None:
-		"""Updates the display on every frame."""
-		glPointSize(30)
-		glDrawArrays(GL_POINTS, 0, 1)
-		
-		# glClearColor(0.0, 0.0, 0.0, 1.0)
-		# glClear(GL_COLOR_BUFFER_BIT)
+            self.__display()
 
-	def initialize(self) -> None:
-		self.__initialize_window()
-		self.__shader_manager = ShaderManager()
+            swap_buffers(self.__window)
+            poll_events()
 
-	def __initialize_window(self) -> None:
-		"""The main driver code."""
+        destroy_window(self.__window)
+        terminate()
+        exit(0)
 
-		# Initialize glfw
-		if not glfw.init():
-			print("glfw failed to initialize!")
-			exit(1)
 
-		# Setup OpenGL hints and create the window
-		glfw.window_hint(glfw.CONTEXT_VERSION_MINOR, 4)
-		glfw.window_hint(glfw.CONTEXT_VERSION_MAJOR, 4)
-		glfw.window_hint(glfw.OPENGL_PROFILE, glfw.OPENGL_CORE_PROFILE)
+if __name__ == "__main__":
+    # Create the driver code
+    app = App()
 
-		self.__window = glfw.create_window(800, 800, "window", None, None)
+    # Initialize the application
+    app.initialize()
 
-		# Make the current context the application window 
-		glfw.make_context_current(self.__window)
-
-		# Enable v-sync
-		glfw.swap_interval(1)
-
-		# Generate the vertex array object
-		vao = GLuint()
-
-		glGenVertexArrays(1, vao)
-		glBindVertexArray(vao)
-
-	def run(self):
-		self.__shader_manager.use_shader_program()
-
-		# Update the window while it is not closed
-		while not glfw.window_should_close(self.__window):
-			self.__display()
-			glfw.swap_buffers(self.__window)
-			glfw.poll_events()
-
-		glfw.destroy_window(self.__window)
-		glfw.terminate()
-		exit(0)
-
-if __name__ == '__main__':
-	# Create the driver code
-	app = App()
-
-	# Initialize the application
-	app.initialize()
-
-	# Run the application
-	app.run()
+    # Run the application
+    app.run()

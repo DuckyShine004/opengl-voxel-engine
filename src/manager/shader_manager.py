@@ -52,13 +52,21 @@ class ShaderManager:
         glCompileShader(self.__frag_shader)
 
     def __attach_shaders(self) -> None:
-        """Attach the shaders to the shader program."""
+        """Attach the shaders to the shader program.
+
+        This includes linking the program with the shaders. It is also
+        important that we delete the shaders after the linking with the
+        program.
+        """
         self.__shader_program_id = glCreateProgram()
 
         glAttachShader(self.__shader_program_id, self.__vert_shader)
         glAttachShader(self.__shader_program_id, self.__frag_shader)
 
         glLinkProgram(self.__shader_program_id)
+
+        glDeleteShader(self.__vert_shader)
+        glDeleteShader(self.__frag_shader)
 
     def __create_shader_program(self) -> None:
         """Create the OpenGL pipeline for the rendering engine to work."""
