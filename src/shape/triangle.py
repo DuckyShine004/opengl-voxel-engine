@@ -56,9 +56,11 @@ class Triangle:
         #     dx    , dy + h, dz
         # ], dtype = "float32")
 
-        vertices = numpy.array(
-            [0.5, 0.5, 0.0, 0.5, -0.5, 0.0, -0.5, -0.5, 0.0, -0.5, 0.5, 0.0],
-            dtype="float32",
-        )
+        # vertices = numpy.array(
+        #     [0.5, 0.5, 0.0, 0.5, -0.5, 0.0, -0.5, -0.5, 0.0, -0.5, 0.5, 0.0],
+        #     dtype="float32",
+        # )
+
+        vertices = numpy.array([0.5, -0.5, 0.0, -0.5, -0.5, 0.0, 0.0, 0.5, 0.0], dtype="float32")
 
         return vertices
