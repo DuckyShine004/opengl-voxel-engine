@@ -8,6 +8,7 @@ from OpenGL.GL import *
 from glfw import *
 
 from manager.shader_manager import ShaderManager
+from manager.shape_manager import ShapeManager
 from shape.triangle import Triangle
 
 
@@ -52,7 +53,7 @@ class App:
         triangle = Triangle()
         vertices = triangle.get_vertices()
 
-        indices = numpy.array([0,1,3,1,2,3], dtype="uint32")
+        indices = numpy.array([0, 1, 3, 1, 2, 3], dtype="uint32")
 
         # Generate the vertex array object
         vao = glGenVertexArrays(1)
@@ -63,13 +64,20 @@ class App:
         glBindBuffer(GL_ARRAY_BUFFER, vbo)
         glBufferData(GL_ARRAY_BUFFER, vertices.nbytes, vertices, GL_STATIC_DRAW)
 
-         # Generate the element buffer object
+        # Generate the element buffer object
         ebo = glGenBuffers(1)
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo)
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.nbytes, indices, GL_STATIC_DRAW)
 
         # Setup the vertex attribute pointer for layout location 0 in the vertex shader
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * ctypes.sizeof(ctypes.c_float), ctypes.c_void_p(0))
+        glVertexAttribPointer(
+            0,
+            3,
+            GL_FLOAT,
+            GL_FALSE,
+            3 * ctypes.sizeof(ctypes.c_float),
+            ctypes.c_void_p(0),
+        )
         glEnableVertexAttribArray(0)
 
     def __process_inputs(self) -> None:
@@ -87,6 +95,7 @@ class App:
     def run(self):
         """Run the OpenGL application that was created."""
         self.__shader_manager.use_shader_program()
+        ShapeManager.set_draw_mode_fill(False)
 
         while not window_should_close(self.__window):
             self.__process_inputs()
