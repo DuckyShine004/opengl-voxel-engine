@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import ctypes
+import numpy
 
 from OpenGL.GL import *
 from glfw import *
@@ -51,26 +52,25 @@ class App:
         triangle = Triangle()
         vertices = triangle.get_vertices()
 
-        # Generate the vertex array object
-        vao = GLuint()
+        indices = numpy.array([0,1,3,1,2,3], dtype="uint32")
 
-        glGenVertexArrays(1, vao)
+        # Generate the vertex array object
+        vao = glGenVertexArrays(1)
         glBindVertexArray(vao)
 
-        # Create the vertex buffer object
-        vbo = GLuint()
-
-        # Generate buffers for OpenGL to use
-        glGenBuffers(1, vbo)
+        # Generate the vertex buffer object for OpenGL to use
+        vbo = glGenBuffers(1)
         glBindBuffer(GL_ARRAY_BUFFER, vbo)
         glBufferData(GL_ARRAY_BUFFER, vertices.nbytes, vertices, GL_STATIC_DRAW)
 
-        # Setup the vertex attribute pointer
+         # Generate the element buffer object
+        ebo = glGenBuffers(1)
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo)
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.nbytes, indices, GL_STATIC_DRAW)
+
+        # Setup the vertex attribute pointer for layout location 0 in the vertex shader
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * ctypes.sizeof(ctypes.c_float), ctypes.c_void_p(0))
         glEnableVertexAttribArray(0)
-
-        # Use the shader program before rendering anything
-        self.__shader_manager.use_shader_program()
 
     def __process_inputs(self) -> None:
         """Summary."""
@@ -79,17 +79,15 @@ class App:
 
     def __display(self) -> None:
         """Updates the display on every frame."""
+        glClearColor(0.0, 0.0, 0.0, 1.0)
+        glClear(GL_COLOR_BUFFER_BIT)
 
-        # glClear(GL_COLOR_BUFFER_BIT)
-        # glClearColor(0.0, 0.0, 0.0, 1.0)
-
-        glDrawArrays(GL_TRIANGLES, 0, 3)
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, ctypes.c_void_p(0))
 
     def run(self):
-        """Summary."""
+        """Run the OpenGL application that was created."""
+        self.__shader_manager.use_shader_program()
 
-
-        # Update the window while it is not closed
         while not window_should_close(self.__window):
             self.__process_inputs()
 

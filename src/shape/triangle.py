@@ -45,10 +45,17 @@ class Triangle:
         dy = y + self.__y
         dz = z + self.__z
 
+        # vertices = numpy.array([
+        #     dx    , dy    , dz    ,
+        #     dx + w, dy    , dz    ,
+        #     dx    , dy + h, dz     
+        # ], dtype = "float32")
+
         vertices = numpy.array([
-            dx    , dy    , dz    ,
-            dx + w, dy    , dz    ,
-            dx    , dy + h, dz     
+            0.5,  0.5, 0.0,
+            0.5, -0.5, 0.0,
+           -0.5, -0.5, 0.0,
+           -0.5,  0.5, 0.0
         ], dtype = "float32")
 
         return vertices
