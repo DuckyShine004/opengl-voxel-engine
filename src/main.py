@@ -1,11 +1,12 @@
 """Summary."""
 from __future__ import annotations
 
+import glfw
 import ctypes
 import numpy
 
 from OpenGL.GL import *
-from glfw import *
+from math import sin, cos
 
 from manager.shader_manager import ShaderManager
 from manager.shape_manager import ShapeManager
@@ -31,22 +32,22 @@ class App:
         """The main driver code."""
 
         # Initialize glfw
-        if not init():
+        if not glfw.init():
             print("glfw failed to initialize!")
             exit(1)
 
         # Setup OpenGL hints and create the window
-        window_hint(CONTEXT_VERSION_MINOR, 4)
-        window_hint(CONTEXT_VERSION_MAJOR, 4)
-        window_hint(OPENGL_PROFILE, OPENGL_CORE_PROFILE)
+        glfw.window_hint(glfw.CONTEXT_VERSION_MINOR, 4)
+        glfw.window_hint(glfw.CONTEXT_VERSION_MAJOR, 4)
+        glfw.window_hint(glfw.OPENGL_PROFILE, glfw.OPENGL_CORE_PROFILE)
 
-        self.__window = create_window(800, 800, "window", None, None)
+        self.__window = glfw.create_window(800, 800, "window", None, None)
 
         # Make the current context the application window
-        make_context_current(self.__window)
+        glfw.make_context_current(self.__window)
 
         # Enable v-sync
-        swap_interval(1)
+        glfw.swap_interval(1)
 
     def test(self):
         # Create a new instance of triangle
@@ -70,25 +71,22 @@ class App:
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.nbytes, indices, GL_STATIC_DRAW)
 
         # Setup the vertex attribute pointer for layout location 0 in the vertex shader
-        glVertexAttribPointer(
-            0,
-            3,
-            GL_FLOAT,
-            GL_FALSE,
-            3 * ctypes.sizeof(ctypes.c_float),
-            ctypes.c_void_p(0),
-        )
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * ctypes.sizeof(ctypes.c_float), ctypes.c_void_p(0))
         glEnableVertexAttribArray(0)
 
     def __process_inputs(self) -> None:
         """Summary."""
-        if get_key(self.__window, KEY_ESCAPE) == PRESS:
-            set_window_should_close(self.__window, True)
+        if glfw.get_key(self.__window, glfw.KEY_ESCAPE) == glfw.PRESS:
+            glfw.set_window_should_close(self.__window, True)
 
     def __display(self) -> None:
         """Updates the display on every frame."""
         glClearColor(0.0, 0.0, 0.0, 1.0)
         glClear(GL_COLOR_BUFFER_BIT)
+
+        time_value = glfw.get_time()
+        green_value = sin(time_value) / 2.5
+        self.__shader_manager.set_float_4_location("ourColor", 0.0, green_value, 0.0, 1.0)
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, ctypes.c_void_p(0))
 
@@ -97,16 +95,16 @@ class App:
         self.__shader_manager.use_shader_program()
         ShapeManager.set_draw_mode_fill(False)
 
-        while not window_should_close(self.__window):
+        while not glfw.window_should_close(self.__window):
             self.__process_inputs()
 
             self.__display()
 
-            swap_buffers(self.__window)
-            poll_events()
+            glfw.swap_buffers(self.__window)
+            glfw.poll_events()
 
-        destroy_window(self.__window)
-        terminate()
+        glfw.destroy_window(self.__window)
+        glfw.terminate()
         exit(0)
 
 

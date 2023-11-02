@@ -74,6 +74,15 @@ class ShaderManager:
         self.__compile_shaders()
         self.__attach_shaders()
 
+    def set_integer_1_location(self, name: str, value: int) -> None:
+        glUniform1i(glGetUniformLocation(self.__shader_program_id, name), value)
+
+    def set_float_1_location(self, name: str, value: float) -> None:
+        glUniform1f(glGetUniformLocation(self.__shader_program_id, name), value)
+
+    def set_float_4_location(self, name: str, v0: float, v1: float, v2: float, v3: float):
+        glUniform4f(glGetUniformLocation(self.__shader_program_id, name), v0, v1, v2, v3)
+
     def use_shader_program(self) -> None:
         """Use the shader program."""
         glUseProgram(self.__shader_program_id)
