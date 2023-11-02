@@ -40,3 +40,7 @@ class Tests:
         glBindBuffer(GL_ARRAY_BUFFER, color_vbo)
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * ctypes.sizeof(ctypes.c_float), ctypes.c_void_p(0))
         glEnableVertexAttribArray(1)
+
+    @staticmethod
+    def test_textured_triangle():
+        ...
