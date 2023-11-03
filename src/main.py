@@ -63,7 +63,7 @@ class App:
     def __display(self) -> None:
         """Updates the display on every frame."""
         glClearColor(0.0, 0.0, 0.0, 1.0)
-        glClear(GL_COLOR_BUFFER_BIT)
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, ctypes.c_void_p(0))
         # glDrawArrays(GL_TRIANGLES, 0, 6)
@@ -72,6 +72,8 @@ class App:
         """Run the OpenGL application that was created."""
         ShapeManager.set_draw_mode_fill(True)
         self.__shader_manager.use_shader_program()
+
+        glEnable(GL_DEPTH_TEST); 
 
         while not glfw.window_should_close(self.__window):
 
@@ -86,10 +88,10 @@ class App:
 
             model = glm.rotate(model, float(glfw.get_time()) * glm.radians(50.0), glm.vec3(0.5, 1.0, 0.0))
 
-            
             self.__shader_manager.set_matrix_float_4_location("view_matrix", view)
             self.__shader_manager.set_matrix_float_4_location("projection_matrix", projection)
             self.__shader_manager.set_matrix_float_4_location("model_matrix", model)
+            
             self.__process_inputs()
             self.__display()
 
