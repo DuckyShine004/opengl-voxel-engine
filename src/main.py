@@ -4,6 +4,7 @@ from __future__ import annotations
 import glfw
 import ctypes
 import numpy
+import glm
 
 from OpenGL.GL import *
 
@@ -14,8 +15,10 @@ from manager.shape_manager import ShapeManager
 from manager.texture_manager import TextureManager
 from shape.triangle import Triangle
 from tests.tests import Tests
+from camera.camera import Camera
 
 from constants.file_constants import TEXTURE_LOCATION
+
 class App:
 
     """Summary."""
@@ -24,11 +27,13 @@ class App:
         """Summary."""
         self.__shader_manager: ShaderManager
         self.__window: GLFWWindow
+        self.__camera: Camera
 
     def initialize(self) -> None:
         """Summary."""
         self.__initialize_window()
         self.__shader_manager = ShaderManager()
+        self.__camera = Camera()
 
         Tests.test_textured_triangle()
 
@@ -53,27 +58,24 @@ class App:
         # Enable v-sync
         glfw.swap_interval(1)
 
-    def __process_inputs(self) -> None:
-        """Summary."""
-        if glfw.get_key(self.__window, glfw.KEY_ESCAPE) == glfw.PRESS:
-            glfw.set_window_should_close(self.__window, True)
-
     def __display(self) -> None:
         """Updates the display on every frame."""
         glClearColor(0.0, 0.0, 0.0, 1.0)
-        glClear(GL_COLOR_BUFFER_BIT)
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, ctypes.c_void_p(0))
-        # glDrawArrays(GL_TRIANGLES, 0, 3)
+        # glDrawArrays(GL_TRIANGLES, 0, 6)
 
     def run(self):
         """Run the OpenGL application that was created."""
-        self.__shader_manager.use_shader_program()
         ShapeManager.set_draw_mode_fill(True)
+        self.__shader_manager.use_shader_program()
+        glfw.set_input_mode(self.__window, glfw.CURSOR, glfw.CURSOR_DISABLED)
+
+        glEnable(GL_DEPTH_TEST); 
 
         while not glfw.window_should_close(self.__window):
-            self.__process_inputs()
-
+            self.__camera.update(self.__shader_manager, self.__window, glfw.get_time())
             self.__display()
 
             glfw.swap_buffers(self.__window)
