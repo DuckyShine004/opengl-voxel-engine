@@ -10,18 +10,25 @@ class Camera:
         self.__position = glm.vec3(0.0, 0.0, 0.0)
         self.__speed = camera_speed
 
+        self.__model = glm.mat4(1.0)
+        self.__view = glm.mat4(1.0)
+        self.__projection = glm.mat4(1.0)
+
         self.__front = glm.vec3(0.0, 0.0, -1.0)
         self.__up = glm.vec3(0.0, 1.0, 0.0)
 
         self.__last_frame = 0.0
         
-    def update(self, shader_manager: ShaderManager) -> None:
-        self.__view = glm.lookat(self.__position, self.__position + self.__front, self.__up)
+    def update(self, shader_manager: ShaderManager, window, time: float) -> None:
+        self.__process_inputs(window, time)
 
         # Update the uniform matrix locations after updating the matrices
-        self.__shader_manager.set_matrix_float_4_location("view_matrix", view)
-        self.__shader_manager.set_matrix_float_4_location("projection_matrix", projection)
-        self.__shader_manager.set_matrix_float_4_location("model_matrix", model)
+        shader_manager.set_matrix_float_4_location("view_matrix", self.__view)
+        shader_manager.set_matrix_float_4_location("projection_matrix", self.__projection)
+        shader_manager.set_matrix_float_4_location("model_matrix", self.__model)
+
+        self.__projection = glm.perspective(glm.radians(1.0), 800 / 600, 0.1, 100.0)
+        self.__view = glm.lookAt(self.__position, self.__position + self.__front, self.__up)
 
     def __get_local_time(self, time: float) -> None:
         delta_time = time - self.__last_frame
@@ -30,17 +37,20 @@ class Camera:
         return delta_time
 
     def __process_inputs(self, window, time: float) -> None:
-        self.__speed *= __get_local_time(time)
+        self.__speed *= self.__get_local_time(time)
 
-        if (glfwGetKey(window, glfw.KEY_W) == glfw.PRESS):
+        if glfw.get_key(window, glfw.KEY_ESCAPE) == glfw.PRESS:
+            glfw.set_window_should_close(window, True)
+
+        if (glfw.get_key(window, glfw.KEY_W) == glfw.PRESS):
             self.__position += self.__speed * self.__front
 
-        if (glfwGetKey(window, glfw.KEY_S) == glfw.PRESS):
+        if (glfw.get_key(window, glfw.KEY_S) == glfw.PRESS):
             self.__position -= self.__speed * self.__front
 
-        if (glfwGetKey(window, glfw.KEY_A) == glfw.PRESS):
+        if (glfw.get_key(window, glfw.KEY_A) == glfw.PRESS):
             self.__position -= glm.normalize(glm.cross(self.__front, self.__up)) * self.__speed
 
-        if (glfwGetKey(window, glfw.GLFW_KEY_D) == glfw.GLFW_PRESS):
+        if (glfw.get_key(window, glfw.KEY_D) == glfw.PRESS):
             self.__position += glm.normalize(glm.cross(self.__front, self.__up)) * self.__speed
 
