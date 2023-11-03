@@ -10,7 +10,8 @@ class TextureManager:
 	@staticmethod
 	def get_texture(filename: str) -> GLuint:
 		image = Image.open(filename)
-		image_data = numpy.array(list(image.getdata()), numpy.uint8)
+		image = image.transpose(Image.FLIP_TOP_BOTTOM)
+		image_data = numpy.array(list(image.getdata()), dtype = "uint8")
 		width, height = image.size[0], image.size[1]
 
 		texture = glGenTextures(1)

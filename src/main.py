@@ -31,7 +31,6 @@ class App:
         self.__shader_manager = ShaderManager()
 
         Tests.test_textured_triangle()
-        self.__texture = TextureManager.get_texture(TEXTURE_LOCATION)
 
     def __initialize_window(self) -> None:
         """The main driver code."""
@@ -64,7 +63,6 @@ class App:
         glClearColor(0.0, 0.0, 0.0, 1.0)
         glClear(GL_COLOR_BUFFER_BIT)
 
-        glBindTexture(GL_TEXTURE_2D, self.__texture)
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, ctypes.c_void_p(0))
         # glDrawArrays(GL_TRIANGLES, 0, 3)
 
