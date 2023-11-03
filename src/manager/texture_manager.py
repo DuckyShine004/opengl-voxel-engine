@@ -9,8 +9,9 @@ from PIL import Image
 class TextureManager:
 	@staticmethod
 	def get_texture(filename: str) -> GLuint:
-		image_data = TextureManager.get_image_data(filename)
-		width, height = numpy.shape(image_data)
+		image = Image.open(filename)
+		image_data = numpy.array(list(image.getdata()), numpy.uint8)
+		width, height = image.size[0], image.size[1]
 
 		texture = glGenTextures(1)
 		glBindTexture(GL_TEXTURE_2D, texture)
@@ -19,8 +20,8 @@ class TextureManager:
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
 
-		# Generate the texture and mipmaps
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image_data)
+		# Generate the texture and mipmaps, format should be set to RGBA
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data)
 		glGenerateMipmap(GL_TEXTURE_2D)
 
 		return texture

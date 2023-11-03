@@ -51,7 +51,7 @@ class Tests:
         TextureManager.get_texture(TEXTURE_LOCATION)
 
         indices = numpy.array([0, 1, 3, 1, 2, 3], dtype="uint32")
-        colors = numpy.array([1, 0, 0, 0, 1, 0, 0, 0, 1], dtype="float32")
+        colors = numpy.array([1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0], dtype="float32")
         textures = numpy.array([1,1,1,0,0,0,0,1], dtype="float32")
 
         # Generate the vertex array object
@@ -69,7 +69,7 @@ class Tests:
 
         texture_vbo = glGenBuffers(1)
         glBindBuffer(GL_ARRAY_BUFFER, texture_vbo)
-        glBufferData(GL_ARRAY_BUFFER, texture_vbo.nbytes, textures, GL_STATIC_DRAW)
+        glBufferData(GL_ARRAY_BUFFER, textures.nbytes, textures, GL_STATIC_DRAW)
 
         # Generate the element buffer object
         ebo = glGenBuffers(1)
@@ -87,6 +87,6 @@ class Tests:
         glEnableVertexAttribArray(1)
 
         # Setup the texture attribute pointer for layout location 2 in the vertex shader
-        glBindBuffer(GL_ARRAY_BUFFER, color_vbo)
+        glBindBuffer(GL_ARRAY_BUFFER, texture_vbo)
         glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * ctypes.sizeof(ctypes.c_float), ctypes.c_void_p(0))
         glEnableVertexAttribArray(2)

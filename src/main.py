@@ -11,10 +11,11 @@ from math import sin, cos
 
 from manager.shader_manager import ShaderManager
 from manager.shape_manager import ShapeManager
+from manager.texture_manager import TextureManager
 from shape.triangle import Triangle
 from tests.tests import Tests
 
-
+from constants.file_constants import TEXTURE_LOCATION
 class App:
 
     """Summary."""
@@ -30,6 +31,7 @@ class App:
         self.__shader_manager = ShaderManager()
 
         Tests.test_textured_triangle()
+        self.__texture = TextureManager.get_texture(TEXTURE_LOCATION)
 
     def __initialize_window(self) -> None:
         """The main driver code."""
@@ -62,13 +64,14 @@ class App:
         glClearColor(0.0, 0.0, 0.0, 1.0)
         glClear(GL_COLOR_BUFFER_BIT)
 
-        # glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, ctypes.c_void_p(0))
-        glDrawArrays(GL_TRIANGLES, 0, 3)
+        glBindTexture(GL_TEXTURE_2D, self.__texture)
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, ctypes.c_void_p(0))
+        # glDrawArrays(GL_TRIANGLES, 0, 3)
 
     def run(self):
         """Run the OpenGL application that was created."""
         self.__shader_manager.use_shader_program()
-        ShapeManager.set_draw_mode_fill(False)
+        ShapeManager.set_draw_mode_fill(True)
 
         while not glfw.window_should_close(self.__window):
             self.__process_inputs()
