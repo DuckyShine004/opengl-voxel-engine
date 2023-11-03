@@ -29,7 +29,7 @@ class App:
         self.__initialize_window()
         self.__shader_manager = ShaderManager()
 
-        Tests.test_rainbow_triangle()
+        Tests.test_textured_triangle()
 
     def __initialize_window(self) -> None:
         """The main driver code."""
