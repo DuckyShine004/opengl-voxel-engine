@@ -1,4 +1,8 @@
 """Summary."""
+from __future__ import annotations
+
+import glm
+
 from OpenGL.GL import *
 
 from constants.file_constants import SHADER_LOCATION
@@ -10,6 +14,8 @@ class ShaderManager:
 
     For example, we might want to create a shader program.
     """
+
+    shader_program_id: int
 
     def __init__(self) -> None:
         """Initialize the shader manager.
@@ -82,6 +88,10 @@ class ShaderManager:
 
     def set_float_4_location(self, name: str, v0: float, v1: float, v2: float, v3: float):
         glUniform4f(glGetUniformLocation(self.__shader_program_id, name), v0, v1, v2, v3)
+
+    def set_matrix_float_4_location(self, name: str, value: mat4):
+        location = glGetUniformLocation(self.__shader_program_id, name)
+        glUniformMatrix4fv(location, 1, GL_FALSE, glm.value_ptr(value));
 
     def use_shader_program(self) -> None:
         """Use the shader program."""

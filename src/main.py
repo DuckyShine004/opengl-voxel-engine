@@ -4,6 +4,7 @@ from __future__ import annotations
 import glfw
 import ctypes
 import numpy
+import glm
 
 from OpenGL.GL import *
 
@@ -16,6 +17,7 @@ from shape.triangle import Triangle
 from tests.tests import Tests
 
 from constants.file_constants import TEXTURE_LOCATION
+
 class App:
 
     """Summary."""
@@ -70,6 +72,12 @@ class App:
         """Run the OpenGL application that was created."""
         self.__shader_manager.use_shader_program()
         ShapeManager.set_draw_mode_fill(True)
+
+        trans = glm.mat4(1.0);
+        trans = glm.rotate(trans, glm.radians(90.0), glm.vec3(0.0, 0.0, 1.0));
+        trans = glm.scale(trans, glm.vec3(1.0,1.0,1.0)); 
+
+        self.__shader_manager.set_matrix_float_4_location("transform", trans)
 
         while not glfw.window_should_close(self.__window):
             self.__process_inputs()

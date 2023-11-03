@@ -11,7 +11,9 @@ class TextureManager:
 	def get_texture(filename: str) -> GLuint:
 		image = Image.open(filename)
 		image = image.transpose(Image.FLIP_TOP_BOTTOM)
+
 		image_data = numpy.array(list(image.getdata()), dtype = "uint8")
+
 		width, height = image.size[0], image.size[1]
 
 		texture = glGenTextures(1)
@@ -26,12 +28,3 @@ class TextureManager:
 		glGenerateMipmap(GL_TEXTURE_2D)
 
 		return texture
-
-
-	@staticmethod
-	def get_image_data(filename: str) -> _ArrayType:
-		image = Image.open(filename)
-		image_data = numpy.array(list(image.getdata()), dtype = "int8")
-
-		return image_data
-
