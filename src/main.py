@@ -68,7 +68,7 @@ class App:
     def run(self):
         """Run the OpenGL application that was created."""
         self.__shader_manager.use_shader_program()
-        ShapeManager.set_draw_mode_fill(True)
+        ShapeManager.set_draw_mode_fill(False)
 
         while not glfw.window_should_close(self.__window):
             self.__process_inputs()
