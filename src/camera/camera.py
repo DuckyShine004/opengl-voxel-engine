@@ -45,7 +45,6 @@ class Camera:
     def update(self, shader_manager: ShaderManager, window: glfw.GLFWwindow, time: float) -> None:
         self.__process_inputs(window, time)
         self.__update_projection_matrix()
-
         self.__view = glm.lookAt(self.__position, self.__position + self.__front, self.__up)
 
         shader_manager.set_matrix_float_4_location("view_matrix", self.__view)
