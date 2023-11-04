@@ -73,7 +73,7 @@ class App:
 
         #         glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, ctypes.c_void_p(0))
         glBindVertexArray(self.__vao)
-        glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT, None, 100)
+        glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT, None, 10000)
         glBindVertexArray(0)
 
     def run(self):

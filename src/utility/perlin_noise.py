@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import random
 import ctypes
+import sys
 
 from math import floor, sin, cos, pi
 
@@ -17,7 +18,7 @@ class PerlinNoise:
     @staticmethod
     def get_random_gradient(ix: int, iy: int) -> Tuple[float, float]:
         w = 8 * ctypes.sizeof(ctypes.c_uint)
-        s = w / 2; // rotation width
+        s = w // 2
 
         a = ix 
         b = iy
@@ -30,7 +31,7 @@ class PerlinNoise:
         a ^= b << s | b >> w-s
         a *= 2048419325;
 
-        _random = a * (pi / ~(~0 >> 1))
+        _random = a * (pi / sys.maxsize)
 
         return (cos(_random), sin(_random))
 
@@ -44,7 +45,10 @@ class PerlinNoise:
         return dx * gradient[0] + dy * gradient[1]
 
     @staticmethod
-    def get_noise(x: float, y: float) -> float:
+    def get_noise(x: float, y: float, frequency: Optional[float] = 0.20, amplitude: Optional[float] = 5.0) -> int:
+        x *= frequency
+        y *= frequency
+
         x0 = floor(x)
         x1 = x0 + 1
         y0 = floor(y)
@@ -53,14 +57,15 @@ class PerlinNoise:
         sx = x - float(x0)
         sy = y - float(y0)
 
-        n0 = dotGridGradient(x0, y0, x, y)
-        n1 = dotGridGradient(x1, y0, x, y)
-        ix0 = interpolate(n0, n1, sx)
+        n0 = PerlinNoise.get_dot_gradient(x0, y0, x, y)
+        n1 = PerlinNoise.get_dot_gradient(x1, y0, x, y)
+        ix0 = PerlinNoise.get_interpolation(n0, n1, sx)
 
-        n0 = dotGridGradient(x0, y1, x, y)
-        n1 = dotGridGradient(x1, y1, x, y)
-        ix1 = interpolate(n0, n1, sx)
+        n0 = PerlinNoise.get_dot_gradient(x0, y1, x, y)
+        n1 = PerlinNoise.get_dot_gradient(x1, y1, x, y)
+        ix1 = PerlinNoise.get_interpolation(n0, n1, sx)
 
-        value = interpolate(ix0, ix1, sy)
+        value = PerlinNoise.get_interpolation(ix0, ix1, sy)
+        value = int(value * amplitude)
 
         return value
