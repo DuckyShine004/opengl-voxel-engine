@@ -25,7 +25,7 @@ class Camera:
     def __init__(self, position: glm.vec3 = glm.vec3(0.0, 0.0, 0.0)) -> None:
         self.__position = position
 
-        self.__model = glm.mat4(1.0)
+        # self.__model = glm.mat4(1.0)
         self.__view = glm.mat4(1.0)
         self.__projection = glm.mat4(1.0)
 
@@ -49,7 +49,7 @@ class Camera:
 
         shader_manager.set_matrix_float_4_location("view_matrix", self.__view)
         shader_manager.set_matrix_float_4_location("projection_matrix", self.__projection)
-        shader_manager.set_matrix_float_4_location("model_matrix", self.__model)
+        # shader_manager.set_matrix_float_4_location("model_matrix", self.__model)
 
     def __update_projection_matrix(self) -> None:
         aspect_ratio = SCREEN_WIDTH / SCREEN_HEIGHT
