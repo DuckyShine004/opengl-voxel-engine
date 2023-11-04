@@ -86,12 +86,15 @@ class ShaderManager:
     def set_float_1_location(self, name: str, value: float) -> None:
         glUniform1f(glGetUniformLocation(self.__shader_program_id, name), value)
 
-    def set_float_4_location(self, name: str, v0: float, v1: float, v2: float, v3: float):
+    def set_float_4_location(self, name: str, v0: float, v1: float, v2: float, v3: float) -> None:
         glUniform4f(glGetUniformLocation(self.__shader_program_id, name), v0, v1, v2, v3)
 
-    def set_matrix_float_4_location(self, name: str, value: mat4):
+    def set_vector_3_location(self, name: str, value: glm.vec3) -> None:
+        glUniform3fv(glGetUniformLocation(self.__shader_program_id, name), 1, glm.value_ptr(value))
+
+    def set_matrix_float_4_location(self, name: str, value: glm.mat4) -> None:
         location = glGetUniformLocation(self.__shader_program_id, name)
-        glUniformMatrix4fv(location, 1, GL_FALSE, glm.value_ptr(value));
+        glUniformMatrix4fv(location, 1, GL_FALSE, glm.value_ptr(value))
 
     def use_shader_program(self) -> None:
         """Use the shader program."""
