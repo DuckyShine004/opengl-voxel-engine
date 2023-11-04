@@ -14,8 +14,6 @@ class Cube(Shape):
         y = position[1]
         z = position[2]
 
-        print(w)
-
         vertices = numpy.array(
             [
                 [-w + x, -h + y, d + z],
