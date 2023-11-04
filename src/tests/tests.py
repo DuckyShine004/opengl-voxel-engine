@@ -45,8 +45,7 @@ class Tests:
 
     @staticmethod
     def test_textured_triangle():
-        triangle = Triangle()
-        vertices = triangle.get_vertices()
+        vertices = Triangle.get_vertices()
 
         TextureManager.get_texture(TEXTURE_LOCATION)
 
