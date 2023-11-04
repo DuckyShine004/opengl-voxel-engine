@@ -9,6 +9,8 @@ from manager.shape_manager import ShapeManager
 from manager.texture_manager import TextureManager
 from constants.file_constants import TEXTURE_LOCATION
 from constants.shape_constants import CUBE_INDICES, CUBE_COLORS
+from utility.perlin_noise import PerlinNoise
+from perlin import Perlin
 
 class Tests:
     @staticmethod
@@ -131,10 +133,12 @@ class Tests:
         glEnableVertexAttribArray(1)
 
         translations = []
+        noise = Perlin(10)
 
-        for x in range(10):
-            for z in range(10):
-                translations.append(glm.vec3(x, 0, z))
+        for x in range(100):
+            for z in range(100):
+                y = noise.two(x, z)
+                translations.append(glm.vec3(x, y, z))
 
         translations = numpy.array(translations, dtype = "float32")
 
