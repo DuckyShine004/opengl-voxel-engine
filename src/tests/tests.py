@@ -3,8 +3,11 @@ import numpy
 from OpenGL.GL import *
 
 from shape.triangle import Triangle
+from shape.cube import Cube
+from manager.shape_manager import ShapeManager
 from manager.texture_manager import TextureManager
 from constants.file_constants import TEXTURE_LOCATION
+from constants.shape_constants import CUBE_INDICES, CUBE_COLORS
 
 class Tests:
     @staticmethod
@@ -92,11 +95,11 @@ class Tests:
 
     @staticmethod
     def test_cube():
-        triangle = Triangle()
-        vertices = triangle.get_vertices()
+        ShapeManager.set_draw_mode_fill(False)
+        vertices = Cube.get_vertices()
 
-        indices = numpy.array([0, 1, 3, 1, 2, 3], dtype="uint32")
-        colors = numpy.array([1, 0, 0, 0, 1, 0, 0, 0, 1], dtype="float32")
+        indices = CUBE_INDICES
+        colors = CUBE_COLORS
 
         # Generate the vertex array object
         vao = glGenVertexArrays(1)

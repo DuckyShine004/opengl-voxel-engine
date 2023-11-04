@@ -13,7 +13,6 @@ from math import sin, cos
 from manager.shader_manager import ShaderManager
 from manager.shape_manager import ShapeManager
 from manager.texture_manager import TextureManager
-from shape.triangle import Triangle
 from tests.tests import Tests
 from camera.camera import Camera
 
@@ -35,7 +34,7 @@ class App:
         self.__shader_manager = ShaderManager()
         self.__camera = Camera()
 
-        Tests.test_textured_triangle()
+        Tests.test_cube()
 
     def __initialize_window(self) -> None:
         """The main driver code."""
@@ -50,7 +49,7 @@ class App:
         glfw.window_hint(glfw.CONTEXT_VERSION_MAJOR, 4)
         glfw.window_hint(glfw.OPENGL_PROFILE, glfw.OPENGL_CORE_PROFILE)
 
-        self.__window = glfw.create_window(800, 800, "window", None, None)
+        self.__window = glfw.create_window(1080, 720, "window", None, None)
 
         # Make the current context the application window
         glfw.make_context_current(self.__window)
@@ -63,12 +62,10 @@ class App:
         glClearColor(0.0, 0.0, 0.0, 1.0)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, ctypes.c_void_p(0))
-        # glDrawArrays(GL_TRIANGLES, 0, 6)
+        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, ctypes.c_void_p(0))
 
     def run(self):
         """Run the OpenGL application that was created."""
-        ShapeManager.set_draw_mode_fill(True)
         self.__shader_manager.use_shader_program()
         glfw.set_input_mode(self.__window, glfw.CURSOR, glfw.CURSOR_DISABLED)
 

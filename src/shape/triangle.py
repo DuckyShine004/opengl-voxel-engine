@@ -5,8 +5,6 @@ import numpy
 
 from shape.shape import Shape
 
-from constants.shape_constants import LOCAL_POSITION
-
 
 class Triangle(Shape):
     @staticmethod
