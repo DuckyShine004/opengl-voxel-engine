@@ -34,6 +34,14 @@ class ShaderManager:
 
         self.__create_shader_program()
 
+    def __get_shader_compile_status(self, shader: int) -> None:
+        """Check if the shader compiled successfully."""
+        status = glGetShaderiv(shader, GL_COMPILE_STATUS)
+
+        if not status:
+            error_log = glGetShaderInfoLog(shader).decode()
+            raise RuntimeError(f"Shader compilation failed:\n{error_log}")
+
     def __get_shaders(self):
         """Get the vertex shader and fragment shaders in the form of a
         string."""
@@ -55,7 +63,10 @@ class ShaderManager:
         glShaderSource(self.__frag_shader, self.__frag_shader_source)
 
         glCompileShader(self.__vert_shader)
+        self.__get_shader_compile_status(self.__vert_shader)
+
         glCompileShader(self.__frag_shader)
+        self.__get_shader_compile_status(self.__frag_shader)
 
     def __attach_shaders(self) -> None:
         """Attach the shaders to the shader program.
@@ -86,12 +97,15 @@ class ShaderManager:
     def set_float_1_location(self, name: str, value: float) -> None:
         glUniform1f(glGetUniformLocation(self.__shader_program_id, name), value)
 
-    def set_float_4_location(self, name: str, v0: float, v1: float, v2: float, v3: float):
+    def set_float_4_location(self, name: str, v0: float, v1: float, v2: float, v3: float) -> None:
         glUniform4f(glGetUniformLocation(self.__shader_program_id, name), v0, v1, v2, v3)
 
-    def set_matrix_float_4_location(self, name: str, value: mat4):
+    def set_vector_3_location(self, name: str, value: glm.vec3) -> None:
+        glUniform3fv(glGetUniformLocation(self.__shader_program_id, name), 1, glm.value_ptr(value))
+
+    def set_matrix_float_4_location(self, name: str, value: glm.mat4) -> None:
         location = glGetUniformLocation(self.__shader_program_id, name)
-        glUniformMatrix4fv(location, 1, GL_FALSE, glm.value_ptr(value));
+        glUniformMatrix4fv(location, 1, GL_FALSE, glm.value_ptr(value))
 
     def use_shader_program(self) -> None:
         """Use the shader program."""

@@ -1,4 +1,5 @@
 import numpy
+import glm
 
 from OpenGL.GL import *
 
@@ -128,3 +129,23 @@ class Tests:
         glBindBuffer(GL_ARRAY_BUFFER, color_vbo)
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * ctypes.sizeof(ctypes.c_float), ctypes.c_void_p(0))
         glEnableVertexAttribArray(1)
+
+        translations = []
+
+        for x in range(10):
+            for z in range(10):
+                translations.append(glm.vec3(x, 0, z))
+
+        translations = numpy.array(translations, dtype = "float32")
+
+        instance_vbo = glGenBuffers(1)
+        glBindBuffer(GL_ARRAY_BUFFER, instance_vbo)
+        glBufferData(GL_ARRAY_BUFFER, translations.nbytes, translations, GL_STATIC_DRAW)
+        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * ctypes.sizeof(ctypes.c_float), ctypes.c_void_p(0))
+        glEnableVertexAttribArray(2)
+        glVertexAttribDivisor(2, 1)
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0)
+        glBindVertexArray(0)
+
+        return vao
