@@ -15,6 +15,7 @@ from manager.shape_manager import ShapeManager
 from manager.texture_manager import TextureManager
 from tests.tests import Tests
 from camera.camera import Camera
+from utility.perlin_noise import PerlinNoise
 
 from constants.file_constants import TEXTURE_LOCATION
 
@@ -80,7 +81,10 @@ class App:
         self.__shader_manager.use_shader_program()
         glfw.set_input_mode(self.__window, glfw.CURSOR, glfw.CURSOR_DISABLED)
 
-        glEnable(GL_DEPTH_TEST); 
+        glEnable(GL_DEPTH_TEST)
+
+        PerlinNoise.initialize(10)
+
 
         while not glfw.window_should_close(self.__window):
             self.__camera.update(self.__shader_manager, self.__window, glfw.get_time())
