@@ -86,6 +86,12 @@ class Camera:
         if glfw.get_key(window, glfw.KEY_D) == glfw.PRESS:
             self.__position += glm.normalize(glm.cross(self.__front, self.__up)) * speed
 
+        if glfw.get_key(window, glfw.KEY_SPACE) == glfw.PRESS:
+            self.__position += speed * self.__up
+
+        if glfw.get_key(window, glfw.KEY_LEFT_SHIFT) == glfw.PRESS:
+            self.__position -= speed * self.__up
+
     def __mouse_callback(
         self, window: glfw.GLFWwindow, current_mouse_x: float, current_mouse_y: float
     ) -> None:
