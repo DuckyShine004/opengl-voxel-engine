@@ -34,6 +34,14 @@ class ShaderManager:
 
         self.__create_shader_program()
 
+    def __get_shader_compile_status(self, shader: int) -> None:
+        """Check if the shader compiled successfully."""
+        status = glGetShaderiv(shader, GL_COMPILE_STATUS)
+
+        if not status:
+            error_log = glGetShaderInfoLog(shader).decode()
+            raise RuntimeError(f"Shader compilation failed:\n{error_log}")
+
     def __get_shaders(self):
         """Get the vertex shader and fragment shaders in the form of a
         string."""
@@ -55,7 +63,10 @@ class ShaderManager:
         glShaderSource(self.__frag_shader, self.__frag_shader_source)
 
         glCompileShader(self.__vert_shader)
+        self.__get_shader_compile_status(self.__vert_shader)
+
         glCompileShader(self.__frag_shader)
+        self.__get_shader_compile_status(self.__frag_shader)
 
     def __attach_shaders(self) -> None:
         """Attach the shaders to the shader program.
