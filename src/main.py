@@ -5,6 +5,7 @@ import glfw
 import ctypes
 import numpy
 import glm
+import pygame
 
 from OpenGL.GL import *
 
@@ -16,6 +17,7 @@ from manager.texture_manager import TextureManager
 from tests.tests import Tests
 from camera.camera import Camera
 from utility.perlin_noise import PerlinNoise
+from manager.music_manager import MusicManager
 
 from constants.application_constants import BACKGROUND_COLOR
 
@@ -26,6 +28,7 @@ class App:
     def __init__(self) -> None:
         """Summary."""
         self.__shader_manager: ShaderManager
+        self.__music_manager: MusicManager
         self.__window: GLFWWindow
         self.__camera: Camera
 
@@ -33,6 +36,7 @@ class App:
         """Summary."""
         self.__initialize_window()
         self.__shader_manager = ShaderManager()
+        self.__music_manager = MusicManager()
         self.__camera = Camera()
 
         self.__vao, self.__translations = Tests.test_textured_cube()
@@ -80,6 +84,7 @@ class App:
         while not glfw.window_should_close(self.__window):
             self.__camera.update(self.__shader_manager, self.__window, glfw.get_time())
             self.__display()
+            self.__music_manager.play_music()
 
             glfw.swap_buffers(self.__window)
             glfw.poll_events()
