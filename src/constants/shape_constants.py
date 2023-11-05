@@ -32,5 +32,3 @@ CUBE_COLORS = numpy.array(
     ],
     dtype="float32",
 )
-
-CUBE_TEXTURE_COORDINATES = numpy.array([[0,0,1,0,1,1,0,1]], dtype = "float32")

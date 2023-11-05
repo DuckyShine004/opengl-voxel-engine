@@ -7,7 +7,6 @@ import numpy
 import glm
 
 from OpenGL.GL import *
-from OpenGL.GLUT import *
 
 from math import sin, cos
 
@@ -36,7 +35,7 @@ class App:
         self.__shader_manager = ShaderManager()
         self.__camera = Camera()
 
-        self.__vao = Tests.test_textured_cube()
+        self.__vao, self.__translations = Tests.test_textured_cube()
 
     def __initialize_window(self) -> None:
         """The main driver code."""
@@ -65,7 +64,7 @@ class App:
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
         glBindVertexArray(self.__vao)
-        glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT, None, 10000)
+        glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT, None, self.__translations)
         glBindVertexArray(0)
 
     def run(self):

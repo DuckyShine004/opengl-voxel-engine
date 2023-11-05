@@ -23,6 +23,6 @@ class Shape(ABC):
 
         Args:
             position (Optional[Tuple[float, float, float]], optional): The position of the shape.
-            size (Optional[float], optional): The size of the shape
+            size (Optional[float], optional): The size of the shape.
         """
         pass

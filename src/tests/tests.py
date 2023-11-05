@@ -7,9 +7,10 @@ from shape.triangle import Triangle
 from shape.cube import Cube
 from manager.shape_manager import ShapeManager
 from manager.texture_manager import TextureManager
-from constants.shape_constants import CUBE_INDICES, CUBE_COLORS, CUBE_TEXTURE_COORDINATES
+from constants.shape_constants import CUBE_INDICES, CUBE_COLORS
 from utility.perlin_noise import PerlinNoise
 from perlin import Perlin
+import noise
 
 class Tests:
     @staticmethod
@@ -184,8 +185,8 @@ class Tests:
         translations = []
         noise = Perlin(10)
 
-        for x in range(100):
-            for z in range(100):
+        for x in range(64):
+            for z in range(64):
                 y = noise.two(x, z)
                 translations.append(glm.vec3(x, y, z))
 
@@ -201,4 +202,4 @@ class Tests:
         glBindBuffer(GL_ARRAY_BUFFER, 0)
         glBindVertexArray(0)
 
-        return vao
+        return vao, len(translations)
