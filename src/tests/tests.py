@@ -7,7 +7,7 @@ from shape.triangle import Triangle
 from shape.cube import Cube
 from manager.shape_manager import ShapeManager
 from manager.texture_manager import TextureManager
-from constants.file_constants import TEXTURE_LOCATION
+from constants.file_constants import BLOCK_LOCATION
 from constants.shape_constants import CUBE_INDICES, CUBE_COLORS, CUBE_TEXTURE_COORDINATES
 from utility.perlin_noise import PerlinNoise
 from perlin import Perlin
@@ -53,7 +53,7 @@ class Tests:
     def test_textured_triangle():
         vertices = Triangle.get_vertices()
 
-        TextureManager.get_texture(TEXTURE_LOCATION)
+        TextureManager.get_texture(BLOCK_LOCATION)
 
         indices = numpy.array([0, 1, 3, 1, 2, 3], dtype="uint32")
         colors = numpy.array([1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0], dtype="float32")
@@ -159,7 +159,7 @@ class Tests:
         ShapeManager.set_draw_mode_fill(True)
         vertices = Cube.get_vertices()
 
-        TextureManager.get_texture(TEXTURE_LOCATION)
+        TextureManager.bind_block_texture(BLOCK_LOCATION)
 
         indices = CUBE_INDICES
         colors = CUBE_COLORS

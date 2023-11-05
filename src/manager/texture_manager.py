@@ -7,24 +7,28 @@ from OpenGL.GL import *
 from PIL import Image
 
 class TextureManager:
-	@staticmethod
-	def get_texture(filename: str) -> GLuint:
-		image = Image.open(filename)
-		image = image.transpose(Image.FLIP_TOP_BOTTOM)
+    @staticmethod
+    def bind_block_texture(block: str) -> GLuint:
+        filenames = [block] * 6
 
-		image_data = numpy.array(list(image.getdata()), dtype = "uint8")
+        texture = glGenTextures(1)
+        glBindTexture(GL_TEXTURE_CUBE_MAP, texture)
 
-		width, height = image.size[0], image.size[1]
+        for i, filename in enumerate(filenames):
+            image = Image.open(filename)
+            image = image.transpose(Image.FLIP_TOP_BOTTOM)
+            image_data = numpy.array(list(image.getdata()), dtype="uint8")
 
-		texture = glGenTextures(1)
-		glBindTexture(GL_TEXTURE_2D, texture)
+            width, height = image.size[0], image.size[1]
 
-		# For pixelated effect we use the nearest filtering option
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data)
 
-		# Generate the texture and mipmaps, format should be set to RGBA
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data)
-		glGenerateMipmap(GL_TEXTURE_2D)
+        # For pixelated effect we use the nearest filtering option
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE)
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
 
-		return texture
+        # Generate the texture and mipmaps, format should be set to RGBA
+        glGenerateMipmap(GL_TEXTURE_CUBE_MAP);

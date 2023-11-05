@@ -17,8 +17,6 @@ from tests.tests import Tests
 from camera.camera import Camera
 from utility.perlin_noise import PerlinNoise
 
-from constants.file_constants import TEXTURE_LOCATION
-
 class App:
 
     """Summary."""
