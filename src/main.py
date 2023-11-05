@@ -35,9 +35,7 @@ class App:
         self.__shader_manager = ShaderManager()
         self.__camera = Camera()
 
-        self.__vao = Tests.test_cube()
-
-        print(self.__vao)
+        self.__vao = Tests.test_textured_cube()
 
     def __initialize_window(self) -> None:
         """The main driver code."""
@@ -65,15 +63,10 @@ class App:
         glClearColor(0.0, 0.0, 0.0, 1.0)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
-        # for x in range(10):
-        #     for z in range(10):
-        #         model = glm.mat4(1.0)
-        #         model = glm.translate(model, glm.vec3(x, 0, z))
-        #         self.__shader_manager.set_matrix_float_4_location("model_matrix", model)
+        # glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0)
 
-        #         glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, ctypes.c_void_p(0))
         glBindVertexArray(self.__vao)
-        glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT, None, 10000)
+        glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT, None, 1)
         glBindVertexArray(0)
 
     def run(self):
