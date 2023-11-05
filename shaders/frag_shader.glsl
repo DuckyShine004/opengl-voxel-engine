@@ -1,6 +1,5 @@
 #version 430 core
 
-in vec3 ourColor;
 in vec3 fragPos;
 
 out vec4 FragColor;

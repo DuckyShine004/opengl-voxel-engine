@@ -162,7 +162,6 @@ class Tests:
 
         indices = CUBE_INDICES
         colors = CUBE_COLORS
-        textures = CUBE_TEXTURE_COORDINATES
 
         # Generate the vertex array object
         vao = glGenVertexArrays(1)
@@ -176,10 +175,6 @@ class Tests:
         color_vbo = glGenBuffers(1)
         glBindBuffer(GL_ARRAY_BUFFER, color_vbo)
         glBufferData(GL_ARRAY_BUFFER, colors.nbytes, colors, GL_STATIC_DRAW)
-
-        texture_vbo = glGenBuffers(1)
-        glBindBuffer(GL_ARRAY_BUFFER, texture_vbo)
-        glBufferData(GL_ARRAY_BUFFER, textures.nbytes, textures, GL_STATIC_DRAW)
 
         # Generate the element buffer object
         ebo = glGenBuffers(1)
@@ -205,11 +200,6 @@ class Tests:
         glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * ctypes.sizeof(ctypes.c_float), ctypes.c_void_p(0))
         glEnableVertexAttribArray(2)
         glVertexAttribDivisor(2, 1)
-
-        # Setup the texture attribute pointer for layout location 2 in the vertex shader
-        glBindBuffer(GL_ARRAY_BUFFER, texture_vbo)
-        glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 2 * ctypes.sizeof(ctypes.c_float), ctypes.c_void_p(0))
-        glEnableVertexAttribArray(3)
 
         glBindBuffer(GL_ARRAY_BUFFER, 0)
         glBindVertexArray(0)
