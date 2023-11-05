@@ -191,7 +191,14 @@ class Tests:
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * ctypes.sizeof(ctypes.c_float), ctypes.c_void_p(0))
         glEnableVertexAttribArray(1)
 
-        translations = [glm.vec3(0, 0, 0)]
+        translations = []
+        noise = Perlin(10)
+
+        for x in range(100):
+            for z in range(100):
+                y = noise.two(x, z)
+                translations.append(glm.vec3(x, y, z))
+
         translations = numpy.array(translations, dtype = "float32")
 
         instance_vbo = glGenBuffers(1)
