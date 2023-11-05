@@ -6,17 +6,18 @@ from OpenGL.GL import *
 
 from PIL import Image
 
+from constants.file_constants import TEXTURE_LOCATION
+
 class TextureManager:
     @staticmethod
-    def bind_block_texture(block: str) -> GLuint:
-        filenames = [block] * 6
+    def bind_texture(texture_type: str) -> GLuint:
+        filenames = TextureManager.get_filenames(texture_type)
 
         texture = glGenTextures(1)
         glBindTexture(GL_TEXTURE_CUBE_MAP, texture)
 
         for i, filename in enumerate(filenames):
             image = Image.open(filename)
-            image = image.transpose(Image.FLIP_TOP_BOTTOM)
             image_data = numpy.array(list(image.getdata()), dtype="uint8")
 
             width, height = image.size[0], image.size[1]
@@ -30,5 +31,17 @@ class TextureManager:
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
 
-        # Generate the texture and mipmaps, format should be set to RGBA
-        glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+        # Generate the texture mipmaps
+        glGenerateMipmap(GL_TEXTURE_CUBE_MAP)
+
+    @staticmethod
+    def get_filenames(texture_type: str) -> List[str]:
+        texture_location = TEXTURE_LOCATION + texture_type + '/'
+        block_type = texture_location + texture_type + "_block_"
+
+        top = block_type + "top.png"
+        side = block_type + "side.png"
+        bottom = block_type + "bottom.png"
+
+        return [side, side, top, bottom, side, side] 
+

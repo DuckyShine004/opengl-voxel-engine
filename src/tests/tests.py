@@ -7,7 +7,6 @@ from shape.triangle import Triangle
 from shape.cube import Cube
 from manager.shape_manager import ShapeManager
 from manager.texture_manager import TextureManager
-from constants.file_constants import BLOCK_LOCATION
 from constants.shape_constants import CUBE_INDICES, CUBE_COLORS, CUBE_TEXTURE_COORDINATES
 from utility.perlin_noise import PerlinNoise
 from perlin import Perlin
@@ -159,7 +158,7 @@ class Tests:
         ShapeManager.set_draw_mode_fill(True)
         vertices = Cube.get_vertices()
 
-        TextureManager.bind_block_texture(BLOCK_LOCATION)
+        TextureManager.bind_texture("grass")
 
         indices = CUBE_INDICES
         colors = CUBE_COLORS
