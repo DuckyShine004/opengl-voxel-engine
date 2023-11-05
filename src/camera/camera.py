@@ -46,8 +46,13 @@ class Camera:
         self.__update_projection_matrix()
         self.__view = glm.lookAt(self.__position, self.__position + self.__front, self.__up)
 
-        shader_manager.set_matrix_float_4_location("view_matrix", self.__view)
-        shader_manager.set_matrix_float_4_location("projection_matrix", self.__projection)
+        shader_manager.set_vector_3("cameraPos", self.__position)
+
+        shader_manager.set_matrix_float_4("view", self.__view)
+        shader_manager.set_matrix_float_4("projection", self.__projection)
+
+    def get_position(self) -> glm.vec3:
+        return self.__position
 
     def __update_projection_matrix(self) -> None:
         aspect_ratio = SCREEN_WIDTH / SCREEN_HEIGHT

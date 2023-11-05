@@ -91,19 +91,19 @@ class ShaderManager:
         self.__compile_shaders()
         self.__attach_shaders()
 
-    def set_integer_1_location(self, name: str, value: int) -> None:
+    def set_integer_1(self, name: str, value: int) -> None:
         glUniform1i(glGetUniformLocation(self.__shader_program_id, name), value)
 
-    def set_float_1_location(self, name: str, value: float) -> None:
+    def set_float_1(self, name: str, value: float) -> None:
         glUniform1f(glGetUniformLocation(self.__shader_program_id, name), value)
 
-    def set_float_4_location(self, name: str, v0: float, v1: float, v2: float, v3: float) -> None:
+    def set_float_4(self, name: str, v0: float, v1: float, v2: float, v3: float) -> None:
         glUniform4f(glGetUniformLocation(self.__shader_program_id, name), v0, v1, v2, v3)
 
-    def set_vector_3_location(self, name: str, value: glm.vec3) -> None:
+    def set_vector_3(self, name: str, value: glm.vec3) -> None:
         glUniform3fv(glGetUniformLocation(self.__shader_program_id, name), 1, glm.value_ptr(value))
 
-    def set_matrix_float_4_location(self, name: str, value: glm.mat4) -> None:
+    def set_matrix_float_4(self, name: str, value: glm.mat4) -> None:
         location = glGetUniformLocation(self.__shader_program_id, name)
         glUniformMatrix4fv(location, 1, GL_FALSE, glm.value_ptr(value))
 

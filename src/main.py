@@ -7,6 +7,7 @@ import numpy
 import glm
 
 from OpenGL.GL import *
+from OpenGL.GLUT import *
 
 from math import sin, cos
 
@@ -16,6 +17,8 @@ from manager.texture_manager import TextureManager
 from tests.tests import Tests
 from camera.camera import Camera
 from utility.perlin_noise import PerlinNoise
+
+from constants.application_constants import BACKGROUND_COLOR
 
 class App:
 
@@ -58,10 +61,8 @@ class App:
 
     def __display(self) -> None:
         """Updates the display on every frame."""
-        glClearColor(0.0, 0.0, 0.0, 1.0)
+        glClearColor(*BACKGROUND_COLOR)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-
-        # glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0)
 
         glBindVertexArray(self.__vao)
         glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT, None, 10000)
@@ -71,11 +72,11 @@ class App:
         """Run the OpenGL application that was created."""
         self.__shader_manager.use_shader_program()
         glfw.set_input_mode(self.__window, glfw.CURSOR, glfw.CURSOR_DISABLED)
-
         glEnable(GL_DEPTH_TEST)
 
-        PerlinNoise.initialize(10)
-
+        self.__shader_manager.set_float_4("fogColor", *BACKGROUND_COLOR)
+        self.__shader_manager.set_float_1("fogStart", 10.0)
+        self.__shader_manager.set_float_1("fogEnd", 50.0)
 
         while not glfw.window_should_close(self.__window):
             self.__camera.update(self.__shader_manager, self.__window, glfw.get_time())

@@ -161,7 +161,6 @@ class Tests:
         TextureManager.bind_texture("grass")
 
         indices = CUBE_INDICES
-        colors = CUBE_COLORS
 
         # Generate the vertex array object
         vao = glGenVertexArrays(1)
@@ -172,10 +171,6 @@ class Tests:
         glBindBuffer(GL_ARRAY_BUFFER, vbo)
         glBufferData(GL_ARRAY_BUFFER, vertices.nbytes, vertices, GL_STATIC_DRAW)
 
-        color_vbo = glGenBuffers(1)
-        glBindBuffer(GL_ARRAY_BUFFER, color_vbo)
-        glBufferData(GL_ARRAY_BUFFER, colors.nbytes, colors, GL_STATIC_DRAW)
-
         # Generate the element buffer object
         ebo = glGenBuffers(1)
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo)
@@ -185,11 +180,6 @@ class Tests:
         glBindBuffer(GL_ARRAY_BUFFER, vbo)
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * ctypes.sizeof(ctypes.c_float), ctypes.c_void_p(0))
         glEnableVertexAttribArray(0)
-
-        # Setup the color attribute pointer for layout location 1 in the vertex shader
-        glBindBuffer(GL_ARRAY_BUFFER, color_vbo)
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * ctypes.sizeof(ctypes.c_float), ctypes.c_void_p(0))
-        glEnableVertexAttribArray(1)
 
         translations = []
         noise = Perlin(10)
@@ -204,9 +194,9 @@ class Tests:
         instance_vbo = glGenBuffers(1)
         glBindBuffer(GL_ARRAY_BUFFER, instance_vbo)
         glBufferData(GL_ARRAY_BUFFER, translations.nbytes, translations, GL_STATIC_DRAW)
-        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * ctypes.sizeof(ctypes.c_float), ctypes.c_void_p(0))
-        glEnableVertexAttribArray(2)
-        glVertexAttribDivisor(2, 1)
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * ctypes.sizeof(ctypes.c_float), ctypes.c_void_p(0))
+        glEnableVertexAttribArray(1)
+        glVertexAttribDivisor(1, 1)
 
         glBindBuffer(GL_ARRAY_BUFFER, 0)
         glBindVertexArray(0)
