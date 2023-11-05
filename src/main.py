@@ -74,6 +74,10 @@ class App:
         glfw.set_input_mode(self.__window, glfw.CURSOR, glfw.CURSOR_DISABLED)
         glEnable(GL_DEPTH_TEST)
 
+        self.__shader_manager.set_float_4("fogColor", *BACKGROUND_COLOR)
+        self.__shader_manager.set_float_1("fogStart", 10.0)
+        self.__shader_manager.set_float_1("fogEnd", 50.0)
+
         while not glfw.window_should_close(self.__window):
             self.__camera.update(self.__shader_manager, self.__window, glfw.get_time())
             self.__display()
