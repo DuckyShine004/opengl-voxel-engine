@@ -11,6 +11,7 @@ from constants.shape_constants import CUBE_INDICES, CUBE_COLORS
 from utility.perlin_noise import PerlinNoise
 from perlin import Perlin
 import noise
+import random
 
 class Tests:
     @staticmethod
@@ -182,15 +183,45 @@ class Tests:
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * ctypes.sizeof(ctypes.c_float), ctypes.c_void_p(0))
         glEnableVertexAttribArray(0)
 
+        rand_seed = random.randint(10000, 99999)
+        frq = 50
+        cfrq = 20
+        amp = 10
+
+        cthreshold = 0.425
+
         translations = []
-        noise = Perlin(10)
+        pnoise = Perlin(10)
 
         for x in range(64):
             for z in range(64):
-                y = noise.two(x, z)
-                translations.append(glm.vec3(x, y, z))
+                y = int(noise.snoise2((x + rand_seed) / frq, (z + rand_seed) / frq) * amp)
+                noise_value_3d = noise.snoise3((x + rand_seed) / frq, (y + rand_seed) / frq, (z + rand_seed) / frq)
+                can_spawn_voxel = noise_value_3d <= cthreshold
+
+                if can_spawn_voxel:
+                    translations.append(glm.vec3(x,y,z))
+
+                for d in range(y - 1, -64, -1):
+                    if (d > y - 5):
+                        noise_value_3d = noise.snoise3((x + rand_seed) / cfrq, (d + rand_seed) / cfrq, (z + rand_seed) / cfrq)
+                        can_spawn_voxel = noise_value_3d <= cthreshold
+
+                        if can_spawn_voxel:
+                            translations.append(glm.vec3(x,d,z))
+
+                    else:
+                        noise_value_3d = noise.snoise3((x + rand_seed) / cfrq, (d + rand_seed) / cfrq, (z + rand_seed) / cfrq)
+                        can_spawn_voxel = noise_value_3d <= cthreshold
+
+                        if can_spawn_voxel:
+                            translations.append(glm.vec3(x,d,z))
+
+
 
         translations = numpy.array(translations, dtype = "float32")
+
+
 
         instance_vbo = glGenBuffers(1)
         glBindBuffer(GL_ARRAY_BUFFER, instance_vbo)
