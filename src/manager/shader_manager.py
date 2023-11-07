@@ -34,12 +34,19 @@ class ShaderManager:
 
         self.__create_shader_program()
 
-    def __get_shader_compile_status(self, shader: int) -> None:
+    def __check_shader_compile_status(self, shader: int) -> None:
         """Check if the shader compiled successfully."""
         status = glGetShaderiv(shader, GL_COMPILE_STATUS)
 
         if not status:
             error_log = glGetShaderInfoLog(shader).decode()
+            raise RuntimeError(f"Shader compilation failed:\n{error_log}")
+
+    def __check_program_linking_status(self) -> None:
+        status = glGetProgramiv(self.__shader_program_id, GL_LINK_STATUS)
+
+        if not status:
+            error_log = glGetProgramInfoLog(self.__shader_program_id).decode()
             raise RuntimeError(f"Shader compilation failed:\n{error_log}")
 
     def __get_shaders(self):
@@ -63,10 +70,10 @@ class ShaderManager:
         glShaderSource(self.__frag_shader, self.__frag_shader_source)
 
         glCompileShader(self.__vert_shader)
-        self.__get_shader_compile_status(self.__vert_shader)
+        self.__check_shader_compile_status(self.__vert_shader)
 
         glCompileShader(self.__frag_shader)
-        self.__get_shader_compile_status(self.__frag_shader)
+        self.__check_shader_compile_status(self.__frag_shader)
 
     def __attach_shaders(self) -> None:
         """Attach the shaders to the shader program.
@@ -81,6 +88,7 @@ class ShaderManager:
         glAttachShader(self.__shader_program_id, self.__frag_shader)
 
         glLinkProgram(self.__shader_program_id)
+        self.__check_program_linking_status()
 
         glDeleteShader(self.__vert_shader)
         glDeleteShader(self.__frag_shader)
@@ -92,16 +100,20 @@ class ShaderManager:
         self.__attach_shaders()
 
     def set_integer_1(self, name: str, value: int) -> None:
-        glUniform1i(glGetUniformLocation(self.__shader_program_id, name), value)
+        location = glGetUniformLocation(self.__shader_program_id, name)
+        glUniform1i(location, value)
 
     def set_float_1(self, name: str, value: float) -> None:
-        glUniform1f(glGetUniformLocation(self.__shader_program_id, name), value)
+        location = glGetUniformLocation(self.__shader_program_id, name)
+        glUniform1f(location, value)
 
     def set_float_4(self, name: str, v0: float, v1: float, v2: float, v3: float) -> None:
-        glUniform4f(glGetUniformLocation(self.__shader_program_id, name), v0, v1, v2, v3)
+        location = glGetUniformLocation(self.__shader_program_id, name)
+        glUniform4f(location, v0, v1, v2, v3)
 
     def set_vector_3(self, name: str, value: glm.vec3) -> None:
-        glUniform3fv(glGetUniformLocation(self.__shader_program_id, name), 1, glm.value_ptr(value))
+        location = glGetUniformLocation(self.__shader_program_id, name)
+        glUniform3fv(location, 1, glm.value_ptr(value))
 
     def set_matrix_float_4(self, name: str, value: glm.mat4) -> None:
         location = glGetUniformLocation(self.__shader_program_id, name)

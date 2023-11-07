@@ -8,7 +8,6 @@ import glm
 import pygame
 
 from OpenGL.GL import *
-from OpenGL.GLUT import *
 
 from math import sin, cos
 
@@ -40,7 +39,7 @@ class App:
         self.__music_manager = MusicManager()
         self.__camera = Camera()
 
-        self.__vao = Tests.test_textured_cube()
+        self.__vao, self.__translations, self.__texture_array = Tests.test_textured_cube()
 
     def __initialize_window(self) -> None:
         """The main driver code."""
@@ -68,8 +67,9 @@ class App:
         glClearColor(*BACKGROUND_COLOR)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
+        glBindTexture(GL_TEXTURE_2D_ARRAY, self.__texture_array)
         glBindVertexArray(self.__vao)
-        glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT, None, 10000)
+        glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT, None, self.__translations)
         glBindVertexArray(0)
 
     def run(self):
@@ -77,10 +77,15 @@ class App:
         self.__shader_manager.use_shader_program()
         glfw.set_input_mode(self.__window, glfw.CURSOR, glfw.CURSOR_DISABLED)
         glEnable(GL_DEPTH_TEST)
+        glEnable(GL_CULL_FACE)
 
         self.__shader_manager.set_float_4("fogColor", *BACKGROUND_COLOR)
         self.__shader_manager.set_float_1("fogStart", 10.0)
         self.__shader_manager.set_float_1("fogEnd", 50.0)
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D_ARRAY, self.__texture_array)
+        self.__shader_manager.set_integer_1("ourTextureArray", 0)
 
         while not glfw.window_should_close(self.__window):
             self.__camera.update(self.__shader_manager, self.__window, glfw.get_time())
