@@ -16,7 +16,6 @@ from manager.shape_manager import ShapeManager
 from manager.texture_manager import TextureManager
 from tests.tests import Tests
 from camera.camera import Camera
-from utility.perlin_noise import PerlinNoise
 from manager.music_manager import MusicManager
 
 from constants.application_constants import BACKGROUND_COLOR

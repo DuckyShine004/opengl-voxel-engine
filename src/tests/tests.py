@@ -3,15 +3,13 @@ import glm
 
 from OpenGL.GL import *
 
-from shape.triangle import Triangle
-from shape.cube import Cube
 from manager.shape_manager import ShapeManager
 from manager.texture_manager import TextureManager
 from constants.shape_constants import CUBE_VERTICES, CUBE_INDICES, CUBE_UVS
-from utility.perlin_noise import PerlinNoise
 from perlin import Perlin
-import noise
 import random
+from world.terrain import Terrain
+from utility.open_simplex_noise import OpenSimplexNoise
 from constants.shape_constants import TEXTURE_WIDTH, TEXTURE_HEIGHT
 
 class Tests:
@@ -54,20 +52,20 @@ class Tests:
         # Generate the vertex buffer object for OpenGL to use
         vbo = glGenBuffers(1)
         glBindBuffer(GL_ARRAY_BUFFER, vbo)
-        glBufferData(GL_ARRAY_BUFFER, vertices.nbytes, vertices, GL_STATIC_DRAW)
+        glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW)
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, ctypes.c_void_p(0))
         glEnableVertexAttribArray(0)
 
         uv_vbo = glGenBuffers(1)
         glBindBuffer(GL_ARRAY_BUFFER, uv_vbo)
-        glBufferData(GL_ARRAY_BUFFER, uvs.nbytes, uvs, GL_STATIC_DRAW)
+        glBufferData(GL_ARRAY_BUFFER, uvs, GL_STATIC_DRAW)
         glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 0, ctypes.c_void_p(0))
         glEnableVertexAttribArray(3)
 
         # Generate the element buffer object
         ebo = glGenBuffers(1)
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo)
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.nbytes, indices, GL_STATIC_DRAW)
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW)
 
         rand_seed = random.randint(10000, 99999)
         frq = 50
@@ -78,40 +76,30 @@ class Tests:
 
         translations = []
 
-        for x in range(64):
-            for z in range(64):
-                y = int(noise.snoise2((x + rand_seed) / frq, (z + rand_seed) / frq) * amp)
-                noise_value_3d = noise.snoise3((x + rand_seed) / frq, (y + rand_seed) / frq, (z + rand_seed) / frq)
+        for x in range(128):
+            for z in range(128):
+                y = Terrain.get_height((x / frq) * amp, (z / frq) * amp)
+                translations.append((glm.vec3(x,y,z), 0))
 
-                if noise_value_3d <= cthreshold:
-                    translations.append((glm.vec3(x,y,z),0))
-
-                for d in range(y - 1, -64, -1):
-                    if (d > y - 5):
-                        noise_value_3d = noise.snoise3((x + rand_seed) / cfrq, (d + rand_seed) / cfrq, (z + rand_seed) / cfrq)
-
-                        if noise_value_3d <= cthreshold:
-                            translations.append((glm.vec3(x,d,z), 1))
-
+                for d in range(10):
+                    if d <= 5:
+                        translations.append((glm.vec3(x,y-d-1, z), 1))
                     else:
-                        noise_value_3d = noise.snoise3((x + rand_seed) / cfrq, (d + rand_seed) / cfrq, (z + rand_seed) / cfrq)
-
-                        if noise_value_3d <= cthreshold:
-                            translations.append((glm.vec3(x,d,z), 2))
+                        translations.append((glm.vec3(x,y-d-1, z), 2))
 
         voxel_positions = numpy.array([translation[0] for translation in translations], dtype = "float32")
 
         instance_vbo = glGenBuffers(1)
         glBindBuffer(GL_ARRAY_BUFFER, instance_vbo)
-        glBufferData(GL_ARRAY_BUFFER, voxel_positions.nbytes, voxel_positions, GL_STATIC_DRAW)
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * ctypes.sizeof(ctypes.c_float), ctypes.c_void_p(0))
+        glBufferData(GL_ARRAY_BUFFER, voxel_positions, GL_STATIC_DRAW)
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, ctypes.c_void_p(0))
         glEnableVertexAttribArray(1)
         glVertexAttribDivisor(1, 1)
 
         texture_indices = numpy.array([translation[1] for translation in translations], dtype = "float32")
         texture_indices_vbo = glGenBuffers(1)
         glBindBuffer(GL_ARRAY_BUFFER, texture_indices_vbo)
-        glBufferData(GL_ARRAY_BUFFER, texture_indices.nbytes, texture_indices, GL_STATIC_DRAW)
+        glBufferData(GL_ARRAY_BUFFER, texture_indices, GL_STATIC_DRAW)
         glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, 0, ctypes.c_void_p(0))
         glEnableVertexAttribArray(2)
         glVertexAttribDivisor(2, 1)
