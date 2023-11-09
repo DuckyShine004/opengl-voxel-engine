@@ -9,8 +9,8 @@ struct Material {
 };
 
 struct Light {
+    vec3 direction;
     vec3 position;
-  
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
@@ -30,9 +30,6 @@ uniform float fogEnd;
 uniform vec3 cameraPos;
 uniform vec4 fogColor;
 
-uniform vec3 lightPos;
-uniform vec3 lightColor;
-
 uniform Material material;
 uniform Light light;
 
@@ -44,7 +41,13 @@ void main() {
 
     // Diffuse
     vec3 norm = normalize(Normal);
-    vec3 lightDir = normalize(lightPos - offsetPos);
+
+    // Point light
+    vec3 lightDir = normalize(light.position - offsetPos);
+
+    // Directional light
+    // vec3 lightDir = normalize(-light.direction);
+
     float diff = max(dot(norm, lightDir), 0.0);
     vec3 diffuse = light.diffuse * (diff * material.diffuse);
 

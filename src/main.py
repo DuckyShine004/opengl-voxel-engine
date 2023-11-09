@@ -24,6 +24,8 @@ from constants.light_constants import (
     MATERIAL_DIFFUSE,
     MATERIAL_SPECULAR,
     MATERIAL_SHINE,
+    LIGHT_DIRECTION,
+    LIGHT_POSITION,
     LIGHT_AMBIENCE,
     LIGHT_DIFFUSE,
     LIGHT_SPECULAR,
@@ -92,14 +94,13 @@ class App:
         self.__shader_manager.set_float_1("fogStart", 10.0)
         self.__shader_manager.set_float_1("fogEnd", 50.0)
 
-        self.__shader_manager.set_float_3("lightPos", 32.0, 10.0, 32.0)
-        self.__shader_manager.set_float_3("lightColor", 1.0, 1.0, 1.0)
-
         self.__shader_manager.set_float_3("material.ambient", *MATERIAL_AMBIENCE)
         self.__shader_manager.set_float_3("material.diffuse", *MATERIAL_DIFFUSE)
         self.__shader_manager.set_float_3("material.specular", *MATERIAL_SPECULAR)
         self.__shader_manager.set_float_1("material.shine", MATERIAL_SHINE)
 
+        self.__shader_manager.set_float_3("light.direction", *LIGHT_DIRECTION)
+        self.__shader_manager.set_float_3("light.position", *LIGHT_POSITION)
         self.__shader_manager.set_float_3("light.ambient", *LIGHT_AMBIENCE)
         self.__shader_manager.set_float_3("light.diffuse", *LIGHT_DIFFUSE)
         self.__shader_manager.set_float_3("light.specular", *LIGHT_SPECULAR)
