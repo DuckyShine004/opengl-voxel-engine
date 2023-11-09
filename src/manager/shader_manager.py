@@ -107,6 +107,10 @@ class ShaderManager:
         location = glGetUniformLocation(self.__shader_program_id, name)
         glUniform1f(location, value)
 
+    def set_float_3(self, name: str, v0: float, v1: float, v2: float) -> None:
+        location = glGetUniformLocation(self.__shader_program_id, name)
+        glUniform3f(location, v0, v1, v2)
+
     def set_float_4(self, name: str, v0: float, v1: float, v2: float, v3: float) -> None:
         location = glGetUniformLocation(self.__shader_program_id, name)
         glUniform4f(location, v0, v1, v2, v3)

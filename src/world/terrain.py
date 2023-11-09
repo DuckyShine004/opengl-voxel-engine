@@ -12,7 +12,7 @@ class Terrain:
 		amplitude_sum = 0.0
 
 		for i in range(4):
-			amplitude = 2 ** i
+			amplitude = pow(2, i)
 			frequency = 1.0 / amplitude
 
 			dx = persistence * frequency * x
