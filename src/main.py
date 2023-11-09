@@ -12,13 +12,23 @@ from OpenGL.GL import *
 from math import sin, cos
 
 from manager.shader_manager import ShaderManager
-from manager.shape_manager import ShapeManager
 from manager.texture_manager import TextureManager
 from tests.tests import Tests
 from camera.camera import Camera
 from manager.music_manager import MusicManager
 
 from constants.application_constants import BACKGROUND_COLOR
+
+from constants.light_constants import (
+    MATERIAL_AMBIENCE,
+    MATERIAL_DIFFUSE,
+    MATERIAL_SPECULAR,
+    MATERIAL_SHINE,
+    LIGHT_AMBIENCE,
+    LIGHT_DIFFUSE,
+    LIGHT_SPECULAR,
+)
+
 
 class App:
 
@@ -82,7 +92,19 @@ class App:
         self.__shader_manager.set_float_1("fogStart", 10.0)
         self.__shader_manager.set_float_1("fogEnd", 50.0)
 
-        glActiveTexture(GL_TEXTURE0);
+        self.__shader_manager.set_float_3("lightPos", 32.0, 10.0, 32.0)
+        self.__shader_manager.set_float_3("lightColor", 1.0, 1.0, 1.0)
+
+        self.__shader_manager.set_float_3("material.ambient", *MATERIAL_AMBIENCE)
+        self.__shader_manager.set_float_3("material.diffuse", *MATERIAL_DIFFUSE)
+        self.__shader_manager.set_float_3("material.specular", *MATERIAL_SPECULAR)
+        self.__shader_manager.set_float_1("material.shine", MATERIAL_SHINE)
+
+        self.__shader_manager.set_float_3("light.ambient", *LIGHT_AMBIENCE)
+        self.__shader_manager.set_float_3("light.diffuse", *LIGHT_DIFFUSE)
+        self.__shader_manager.set_float_3("light.specular", *LIGHT_SPECULAR)
+
+        glActiveTexture(GL_TEXTURE0)
         glBindTexture(GL_TEXTURE_2D_ARRAY, self.__texture_array)
         self.__shader_manager.set_integer_1("ourTextureArray", 0)
 
@@ -97,6 +119,7 @@ class App:
         glfw.destroy_window(self.__window)
         glfw.terminate()
         exit(0)
+
 
 if __name__ == "__main__":
     # Create the driver code
