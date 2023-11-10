@@ -50,7 +50,7 @@ class App:
         self.__music_manager = MusicManager()
         self.__camera = Camera()
 
-        self.__vao, self.__translations, self.__texture_array = Tests.test_textured_cube()
+        self.__vao, self.__translations, self.__texture_array = Tests.test_light_cube()
 
     def __initialize_window(self) -> None:
         """The main driver code."""
