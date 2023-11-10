@@ -163,41 +163,21 @@ class Tests:
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo)
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW)
 
-        rand_seed = random.randint(10000, 99999)
-        frq = 50
-        cfrq = 20
-        amp = 10
-
-        cthreshold = 0.425
-
-        translations = []
-
-        for x in range(64):
-            for z in range(64):
-                y = Terrain.get_height((x / frq) * amp, (z / frq) * amp)
-                translations.append((glm.vec3(x,y,z), 0))
-
-                for d in range(10):
-                    if d <= 5:
-                        translations.append((glm.vec3(x,y-d-1, z), 1))
-                    else:
-                        translations.append((glm.vec3(x,y-d-1, z), 2))
-
-        voxel_positions = numpy.array([translation[0] for translation in translations], dtype = "float32")
+        positions, textures = Terrain.set_chunk()
 
         instance_vbo = glGenBuffers(1)
         glBindBuffer(GL_ARRAY_BUFFER, instance_vbo)
-        glBufferData(GL_ARRAY_BUFFER, voxel_positions, GL_STATIC_DRAW)
+        glBufferData(GL_ARRAY_BUFFER, positions, GL_STATIC_DRAW)
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, ctypes.c_void_p(0))
         glEnableVertexAttribArray(1)
         glVertexAttribDivisor(1, 1)
 
-        texture_indices = numpy.array([translation[1] for translation in translations], dtype = "float32")
+        textures = numpy.array([translation[1] for translation in translations], dtype = "float32")
         texture_indices_vbo = glGenBuffers(1)
         glBindBuffer(GL_ARRAY_BUFFER, texture_indices_vbo)
-        glBufferData(GL_ARRAY_BUFFER, texture_indices, GL_STATIC_DRAW)
+        glBufferData(GL_ARRAY_BUFFER, textures, GL_STATIC_DRAW)
         glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, 0, ctypes.c_void_p(0))
         glEnableVertexAttribArray(2)
         glVertexAttribDivisor(2, 1)
         
-        return vao, len(voxel_positions), texture_array
+        return vao, len(positions), texture_array

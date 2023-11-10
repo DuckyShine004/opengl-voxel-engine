@@ -66,3 +66,9 @@ CUBE_UVS = numpy.array(
     ],
     dtype="float32",
 )
+
+# Chunk
+CHUNK_SIZE = 64
+CHUNK_HEIGHT = 256
+FREQUENCY = 50
+AMPLITUDE = 10

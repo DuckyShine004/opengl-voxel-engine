@@ -7,8 +7,7 @@ MATERIAL_SPECULAR = (0.50, 0.50, 0.50)
 MATERIAL_SHINE = 16.00
 
 # Light source lighting
-angle = math.radians(45)
-LIGHT_DIRECTION = (1.0, -1.0, -1.0)
+LIGHT_DIRECTION = (1.00, -1.00, -1.00)
 LIGHT_POSITION = (32.00, 10.00, 32.00)
 LIGHT_AMBIENCE = (0.20, 0.20, 0.20)
 LIGHT_DIFFUSE = (0.80, 0.80, 0.80)

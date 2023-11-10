@@ -4,24 +4,54 @@ from numba import njit
 
 from world.noise import get_noise_2d, get_noise_3d
 
+from constants.shape_constants import CHUNK_SIZE, CHUNK_HEIGHT, FREQUENCY, AMPLITUDE
+
+
 class Terrain:
-	@staticmethod
-	@njit
-	def get_height(x: float, y: float, exp: float = 1.7, persistence: float = 0.3) -> float:
-		noise_value = 0.0
-		amplitude_sum = 0.0
+    @staticmethod
+    @njit
+    def get_height(x: float, y: float, exp: float = 1.7, persistence: float = 0.3) -> float:
+        noise_value = 0.0
+        amplitude_sum = 0.0
 
-		for i in range(4):
-			amplitude = pow(2, i)
-			frequency = 1.0 / amplitude
+        for i in range(4):
+            amplitude = pow(2, i)
+            frequency = 1.0 / amplitude
 
-			dx = persistence * frequency * x
-			dy = persistence * frequency * y
+            dx = persistence * frequency * x
+            dy = persistence * frequency * y
 
-			dh = get_noise_2d(dx, dy) / 2.0 + 0.5
+            dh = get_noise_2d(dx, dy) / 2.0 + 0.5
 
-			noise_value += amplitude * dh
+            noise_value += amplitude * dh
 
-			amplitude_sum += amplitude
+            amplitude_sum += amplitude
 
-		return int(pow(noise_value * 0.95, exp)) - (2 * amplitude_sum)
+        return int(pow(noise_value * 0.95, exp)) - (2 * amplitude_sum)
+
+    @staticmethod
+    @njit
+    def set_chunk() -> Tuple[numpy.ndarray, numpy.ndarray]:
+        voxel_data = []
+
+        for x in range(CHUNK_SIZE):
+            for z in range(CHUNK_SIZE):
+                dx = AMPLITUDE * (x / FREQUENCY)
+                dz = AMPLITUDE * (z / FREQUENCY)
+
+                y = Terrain.get_height(dx, dz)
+
+                translations.append((glm.vec3(x, y, z), 0))
+
+                for d in range(10):
+                    dy = y - d - 1
+                    
+                    if d <= 5:
+                        translations.append((glm.vec3(x, dy, z), 1))
+                    else:
+                        translations.append((glm.vec3(x, dy, z), 2))
+
+        position_data = numpy.array([voxel_data[0] for voxel_datum in voxel_data], dtype="float32")
+        texture_data = numpy.array([voxel_data[1] for voxel_datum in voxel_data], dtype="float32")
+
+        return position_data, texture_data
