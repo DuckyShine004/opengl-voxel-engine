@@ -26,9 +26,11 @@ class ShaderManager:
         """
         self.__vert_shader: int
         self.__frag_shader: int
+        self.__geom_shader: int
 
         self.__vert_shader_source: str
         self.__frag_shader_source: str
+        self.__geom_shader_source: str
 
         self.__shader_program_id: int
 
@@ -49,14 +51,16 @@ class ShaderManager:
             error_log = glGetProgramInfoLog(self.__shader_program_id).decode()
             raise RuntimeError(f"Shader compilation failed:\n{error_log}")
 
-    def __get_shaders(self):
+    def __set_shaders(self):
         """Get the vertex shader and fragment shaders in the form of a
         string."""
         self.__vert_shader = glCreateShader(GL_VERTEX_SHADER)
         self.__frag_shader = glCreateShader(GL_FRAGMENT_SHADER)
+        self.__geom_shader = glCreateShader(GL_GEOMETRY_SHADER)
 
         vert_shader_location = SHADER_LOCATION + "vert_shader.glsl"
         frag_shader_location = SHADER_LOCATION + "frag_shader.glsl"
+        geom_shader_location = SHADER_LOCATION + "geom_shader.glsl"
 
         with open(vert_shader_location, "r") as vert_file:
             self.__vert_shader_source = vert_file.read()
@@ -64,16 +68,23 @@ class ShaderManager:
         with open(frag_shader_location, "r") as frag_file:
             self.__frag_shader_source = frag_file.read()
 
+        with open(geom_shader_location, "r") as geom_file:
+            self.__geom_shader_source = geom_file.read()
+
     def __compile_shaders(self) -> None:
         """Compile the vertex and fragment shaders."""
         glShaderSource(self.__vert_shader, self.__vert_shader_source)
         glShaderSource(self.__frag_shader, self.__frag_shader_source)
+        glShaderSource(self.__geom_shader, self.__geom_shader_source)
 
         glCompileShader(self.__vert_shader)
         self.__check_shader_compile_status(self.__vert_shader)
 
         glCompileShader(self.__frag_shader)
         self.__check_shader_compile_status(self.__frag_shader)
+
+        glCompileShader(self.__geom_shader)
+        self.__check_shader_compile_status(self.__geom_shader)
 
     def __attach_shaders(self) -> None:
         """Attach the shaders to the shader program.
@@ -86,16 +97,18 @@ class ShaderManager:
 
         glAttachShader(self.__shader_program_id, self.__vert_shader)
         glAttachShader(self.__shader_program_id, self.__frag_shader)
+        glAttachShader(self.__shader_program_id, self.__geom_shader)
 
         glLinkProgram(self.__shader_program_id)
         self.__check_program_linking_status()
 
         glDeleteShader(self.__vert_shader)
         glDeleteShader(self.__frag_shader)
+        glDeleteShader(self.__geom_shader)
 
     def __create_shader_program(self) -> None:
         """Create the OpenGL pipeline for the rendering engine to work."""
-        self.__get_shaders()
+        self.__set_shaders()
         self.__compile_shaders()
         self.__attach_shaders()
 
