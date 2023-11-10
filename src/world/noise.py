@@ -1,4 +1,5 @@
 """This module initializes and optimizes the opensimplex noise module."""
+
 from __future__ import annotations
 
 import sys
