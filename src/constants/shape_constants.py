@@ -1,3 +1,23 @@
+"""Shape constants, like texture constants and voxel / cube constants, and
+chunk constants.
+
+Attributes:
+    AMPLITUDE (int): The amplitude of the noise value.
+    CHUNK_HEIGHT (int): The chunk height.
+    CHUNK_SIZE (int): The width and length of a chunk.
+    CUBE_INDICES (TYPE): The cube's indices.
+    CUBE_UVS (TYPE): The cube's UVs.
+    CUBE_VERTICES (TYPE): The cube's vertices.
+    EXPONENT (float): The exponential value for the noise.
+    FREQUENCY (int): The frequency for the noise.
+    OCTAVES (int): The number of noise sampling octaves.
+    PERSISTENCE (float): The persistence value of the noise.
+    TEXTURE_HEIGHT (int): The height of the texture.
+    TEXTURE_WIDTH (int): The width of the texture.
+    UV_HEIGHT (TYPE): The height of each sub texture in UV coordinates.
+    UV_WIDTH (TYPE): The width of each sub texture in UV coordinates.
+"""
+
 import numpy
 
 # Textures
@@ -66,3 +86,14 @@ CUBE_UVS = numpy.array(
     ],
     dtype="float32",
 )
+
+# Chunk
+CHUNK_SIZE = 64
+CHUNK_HEIGHT = 256
+
+# Noise
+FREQUENCY = 50
+AMPLITUDE = 10
+OCTAVES = 4
+EXPONENT = 1.70
+PERSISTENCE = 0.30
