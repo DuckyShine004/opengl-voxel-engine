@@ -1,3 +1,7 @@
+"""This module is essentially utilised for terrain management.
+
+It is not a manager itself because this is not a generic manager class.
+"""
 from __future__ import annotations
 
 from numba import njit
@@ -8,9 +12,25 @@ from constants.shape_constants import CHUNK_SIZE, CHUNK_HEIGHT, FREQUENCY, AMPLI
 
 
 class Terrain:
+
+    """The Terrain class will handle all things related to terrain."""
+
     @staticmethod
     @njit
     def get_height(x: float, y: float, exp: float = 1.7, persistence: float = 0.3) -> float:
+        """Returns the height map for the given x, y coordinates. The
+        parameters can be adjusted to get the desired height map, or terrain.
+
+        Args:
+            x (float): The x coordinate for noise sampling.
+            y (float): The y coordinate for noise sampling.
+            exp (float, optional): The exponential value which exponentiates the noise value.
+            persistence (float, optional): How detailed we want the terrain to be.
+
+        Returns:
+            float: The noise value.
+        """
+
         noise_value = 0.0
         amplitude_sum = 0.0
 
@@ -32,6 +52,14 @@ class Terrain:
     @staticmethod
     @njit
     def set_chunk() -> Tuple[numpy.ndarray, numpy.ndarray]:
+        """Sets the chunk for the given x, and z positions. If the chunk has
+        already been set, then we simply return nothing.
+
+        Returns:
+            Tuple[numpy.ndarray, numpy.ndarray]: Returns two values, the voxel position data,
+            and the voxel texture data.
+        """
+
         voxel_data = []
 
         for x in range(CHUNK_SIZE):
@@ -45,7 +73,7 @@ class Terrain:
 
                 for d in range(10):
                     dy = y - d - 1
-                    
+
                     if d <= 5:
                         translations.append((glm.vec3(x, dy, z), 1))
                     else:
