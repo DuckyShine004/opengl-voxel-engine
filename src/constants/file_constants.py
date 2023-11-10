@@ -1,5 +1,5 @@
-"""This module provides necessary path constants to hopefully improve code
-readability.
+"""This module provides necessary path and file constants to hopefully improve
+code readability.
 
 Attributes:
     MUSIC_LOCATION (str): The music path.

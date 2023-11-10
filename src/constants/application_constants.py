@@ -1,3 +1,19 @@
+"""This module provides all of the necessary constants for the application.
+
+Attributes:
+    BACKGROUND_COLOR (tuple): The background color.
+    CAMERA_FAR_CLIP (float): The camera's far value.
+    CAMERA_INITIAL_PITCH (float): The camera's initial pitch value.
+    CAMERA_INITIAL_YAW (float): The camera's initial yaw value.
+    CAMERA_NEAR_CLIP (float): The camera's near value.
+    CAMERA_PERSPECTIVE_FOV (float): The camera's FOV value.
+    CAMERA_PITCH_LIMIT (float): The pitch limit.
+    CAMERA_SENSITIVITY (float): The camera's sensitivity.
+    CAMERA_SPEED (float): The camera's speed.
+    SCREEN_HEIGHT (int): The screen's height.
+    SCREEN_WIDTH (int): The screen's width.
+"""
+
 # Display
 SCREEN_WIDTH = 1080
 SCREEN_HEIGHT = 720
