@@ -10,6 +10,8 @@ from world.terrain import Terrain
 from constants.shape_constants import TEXTURE_WIDTH, TEXTURE_HEIGHT
 from utility.utility import Utility
 
+from manager.buffer_manager import BufferManager
+
 class Tests:
     @staticmethod
     def test_light_cube():

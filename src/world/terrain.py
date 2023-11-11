@@ -77,7 +77,7 @@ def _set_chunk() -> Tuple[numpy.ndarray, numpy.ndarray]:
 
             voxel_data.append(((x, y, z), 0))
 
-            for d in range(1):
+            for d in range(64):
                 dy = y - d - 1
 
                 if d <= 5:
