@@ -52,6 +52,12 @@ class App:
 
         self.__vao, self.__translations, self.__texture_array = Tests.test_light_cube()
 
+    def __on_resize_callback(self, window, width, height):
+        glViewport(0, 0, width, height)
+
+        self.__camera.set_width(width)
+        self.__camera.set_height(height)
+
     def __initialize_window(self) -> None:
         """The main driver code."""
 
@@ -78,6 +84,8 @@ class App:
         glClearColor(*BACKGROUND_COLOR)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
+        glfw.set_framebuffer_size_callback(self.__window, self.__on_resize_callback)
+
         glBindTexture(GL_TEXTURE_2D_ARRAY, self.__texture_array)
         glBindVertexArray(self.__vao)
         glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT, None, self.__translations)
@@ -86,7 +94,9 @@ class App:
     def run(self):
         """Run the OpenGL application that was created."""
         self.__shader_manager.use_shader_program()
+
         glfw.set_input_mode(self.__window, glfw.CURSOR, glfw.CURSOR_DISABLED)
+        
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_CULL_FACE)
 
