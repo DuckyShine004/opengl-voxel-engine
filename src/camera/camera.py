@@ -34,6 +34,9 @@ class Camera(object):
             position (glm.vec3, optional): The position at which the camera should be instantiated.
         """
 
+        self.__width = SCREEN_WIDTH
+        self.__height = SCREEN_HEIGHT
+
         self.__position = position
 
         self.__view = glm.mat4(1.0)
@@ -77,10 +80,16 @@ class Camera(object):
 
         return self.__position
 
+    def set_width(self, width: float) -> None:
+        self.__width = width
+
+    def set_height(self, height: float) -> None:
+        self.__height = height
+
     def __update_projection_matrix(self) -> None:
         """Update the projection matrix."""
 
-        aspect_ratio = SCREEN_WIDTH / SCREEN_HEIGHT
+        aspect_ratio = self.__width / self.__height
 
         self.__projection = glm.perspective(
             glm.radians(CAMERA_PERSPECTIVE_FOV), aspect_ratio, CAMERA_NEAR_CLIP, CAMERA_FAR_CLIP
@@ -144,6 +153,9 @@ class Camera(object):
         if glfw.get_key(window, glfw.KEY_LEFT_SHIFT) == glfw.PRESS:
             self.__position -= speed * self.__up
 
+        if glfw.get_key(window, glfw.KEY_E) == glfw.PRESS:
+            self.__set_cursor_mode(window)
+
     def __mouse_callback(
         self, window: glfw.GLFWwindow, current_mouse_x: float, current_mouse_y: float
     ) -> None:
@@ -162,6 +174,14 @@ class Camera(object):
         self.__last_mouse_y = current_mouse_y
 
         self.__update_direction(offset_mouse_x, offset_mouse_y)
+
+    def __set_cursor_mode(self, window) -> None:
+        cursor_mode = glfw.get_input_mode(window, glfw.CURSOR)
+        
+        if cursor_mode == glfw.CURSOR_DISABLED:
+            glfw.set_input_mode(window, glfw.CURSOR, glfw.CURSOR_NORMAL)
+        else:
+            glfw.set_input_mode(window, glfw.CURSOR, glfw.CURSOR_DISABLED)
 
     def __update_direction(self, offset_mouse_x: float, offset_mouse_y: float) -> None:
         """Update the camera's direction. This will update the rotation of the
