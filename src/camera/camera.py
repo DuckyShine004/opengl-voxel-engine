@@ -33,7 +33,6 @@ class Camera(object):
         Args:
             position (glm.vec3, optional): The position at which the camera should be instantiated.
         """
-
         self.__width = SCREEN_WIDTH
         self.__height = SCREEN_HEIGHT
 
@@ -52,6 +51,8 @@ class Camera(object):
 
         self.__last_mouse_x = SCREEN_HEIGHT // 2
         self.__last_mouse_y = SCREEN_HEIGHT // 2
+
+        self.__is_fullscreen = False
 
     def update(self, shader_manager: ShaderManager, window: glfw.GLFWwindow, time: float) -> None:
         """Update the camera, all-in-one method.
@@ -153,9 +154,6 @@ class Camera(object):
         if glfw.get_key(window, glfw.KEY_LEFT_SHIFT) == glfw.PRESS:
             self.__position -= speed * self.__up
 
-        if glfw.get_key(window, glfw.KEY_E) == glfw.PRESS:
-            self.__set_cursor_mode(window)
-
     def __mouse_callback(
         self, window: glfw.GLFWwindow, current_mouse_x: float, current_mouse_y: float
     ) -> None:
@@ -174,14 +172,6 @@ class Camera(object):
         self.__last_mouse_y = current_mouse_y
 
         self.__update_direction(offset_mouse_x, offset_mouse_y)
-
-    def __set_cursor_mode(self, window) -> None:
-        cursor_mode = glfw.get_input_mode(window, glfw.CURSOR)
-        
-        if cursor_mode == glfw.CURSOR_DISABLED:
-            glfw.set_input_mode(window, glfw.CURSOR, glfw.CURSOR_NORMAL)
-        else:
-            glfw.set_input_mode(window, glfw.CURSOR, glfw.CURSOR_DISABLED)
 
     def __update_direction(self, offset_mouse_x: float, offset_mouse_y: float) -> None:
         """Update the camera's direction. This will update the rotation of the
