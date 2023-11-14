@@ -33,6 +33,8 @@ class Camera(object):
         Args:
             position (glm.vec3, optional): The position at which the camera should be instantiated.
         """
+        self.__width = SCREEN_WIDTH
+        self.__height = SCREEN_HEIGHT
 
         self.__position = position
 
@@ -49,6 +51,8 @@ class Camera(object):
 
         self.__last_mouse_x = SCREEN_HEIGHT // 2
         self.__last_mouse_y = SCREEN_HEIGHT // 2
+
+        self.__is_fullscreen = False
 
     def update(self, shader_manager: ShaderManager, window: glfw.GLFWwindow, time: float) -> None:
         """Update the camera, all-in-one method.
@@ -77,10 +81,16 @@ class Camera(object):
 
         return self.__position
 
+    def set_width(self, width: float) -> None:
+        self.__width = width
+
+    def set_height(self, height: float) -> None:
+        self.__height = height
+
     def __update_projection_matrix(self) -> None:
         """Update the projection matrix."""
 
-        aspect_ratio = SCREEN_WIDTH / SCREEN_HEIGHT
+        aspect_ratio = self.__width / self.__height
 
         self.__projection = glm.perspective(
             glm.radians(CAMERA_PERSPECTIVE_FOV), aspect_ratio, CAMERA_NEAR_CLIP, CAMERA_FAR_CLIP

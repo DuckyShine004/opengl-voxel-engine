@@ -16,6 +16,7 @@ from manager.texture_manager import TextureManager
 from tests.tests import Tests
 from camera.camera import Camera
 from manager.music_manager import MusicManager
+from manager.window_manager import WindowManager
 
 from constants.application_constants import BACKGROUND_COLOR
 
@@ -41,7 +42,8 @@ class App:
         self.__shader_manager: ShaderManager
         self.__music_manager: MusicManager
         self.__window: GLFWWindow
-        self.__camera: Camera
+        self.__camera: __camer
+        self.__window_manager: WindowManager
 
     def initialize(self) -> None:
         """Summary."""
@@ -49,8 +51,15 @@ class App:
         self.__shader_manager = ShaderManager()
         self.__music_manager = MusicManager()
         self.__camera = Camera()
+        self.__window_manager = WindowManager(self.__window)
 
         self.__vao, self.__translations, self.__texture_array = Tests.test_light_cube()
+
+    def __on_resize_callback(self, window, width, height):
+        glViewport(0, 0, width, height)
+
+        self.__camera.set_width(width)
+        self.__camera.set_height(height)
 
     def __initialize_window(self) -> None:
         """The main driver code."""
@@ -65,7 +74,8 @@ class App:
         glfw.window_hint(glfw.CONTEXT_VERSION_MAJOR, 4)
         glfw.window_hint(glfw.OPENGL_PROFILE, glfw.OPENGL_CORE_PROFILE)
 
-        self.__window = glfw.create_window(1080, 720, "window", None, None)
+        # Create a full-screen window with the monitor's resolution
+        self.__window = glfw.create_window(1080, 720, "Minecraft", None, None)
 
         # Make the current context the application window
         glfw.make_context_current(self.__window)
@@ -86,7 +96,10 @@ class App:
     def run(self):
         """Run the OpenGL application that was created."""
         self.__shader_manager.use_shader_program()
+
         glfw.set_input_mode(self.__window, glfw.CURSOR, glfw.CURSOR_DISABLED)
+        glfw.set_framebuffer_size_callback(self.__window, self.__on_resize_callback)
+
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_CULL_FACE)
 
@@ -110,6 +123,7 @@ class App:
         self.__shader_manager.set_integer_1("ourTextureArray", 0)
 
         while not glfw.window_should_close(self.__window):
+            self.__window_manager.update()
             self.__camera.update(self.__shader_manager, self.__window, glfw.get_time())
             self.__display()
             self.__music_manager.play_music()
