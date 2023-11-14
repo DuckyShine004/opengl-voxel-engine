@@ -2,8 +2,11 @@ from __future__ import annotations
 
 from OpenGL.GL import *
 
+
 class Buffer:
-    def __init__(self, data, target, location=-1, instancing=False):
+    def __init__(
+        self, data: numpy.ndarray, target: int, location: int = -1, instancing: bool = False
+    ) -> None:
         self.__buffer = glGenBuffers(1)
 
         self.__data = data
@@ -17,11 +20,11 @@ class Buffer:
         self.bind_buffer_data(self.__target, self.__data, self.__buffer)
         self.send_buffer_data(self.__data, self.__location, self.__instancing)
 
-    def bind_buffer_data(self, target, data, buffer):
+    def bind_buffer_data(self, target: int, data: numpy.ndarray, buffer: int) -> None:
         glBindBuffer(target, buffer)
         glBufferData(target, data, GL_STATIC_DRAW)
 
-    def send_buffer_data(self, data, location, instancing):
+    def send_buffer_data(self, data: numpy.ndarray, location: int, instancing: bool) -> None:
         if location == -1:
             return
 
