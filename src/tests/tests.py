@@ -10,6 +10,8 @@ from world.terrain import Terrain
 from constants.shape_constants import TEXTURE_WIDTH, TEXTURE_HEIGHT
 from utility.utility import Utility
 
+from utility.buffer import Buffer
+
 class Tests:
     @staticmethod
     def test_light_cube():
@@ -42,41 +44,18 @@ class Tests:
         uvs = CUBE_UVS
 
         # Generate the vertex array object
-        vao = glGenVertexArrays(1)
+        vao  = glGenVertexArrays(1)
         glBindVertexArray(vao)
 
         # Generate the vertex buffer object for OpenGL to use
-        vbo = glGenBuffers(1)
-        glBindBuffer(GL_ARRAY_BUFFER, vbo)
-        glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW)
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, ctypes.c_void_p(0))
-        glEnableVertexAttribArray(0)
-
-        uv_vbo = glGenBuffers(1)
-        glBindBuffer(GL_ARRAY_BUFFER, uv_vbo)
-        glBufferData(GL_ARRAY_BUFFER, uvs, GL_STATIC_DRAW)
-        glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 0, ctypes.c_void_p(0))
-        glEnableVertexAttribArray(3)
-
-        # Generate the element buffer object
-        ebo = glGenBuffers(1)
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo)
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW)
+        vbo = Buffer(vertices, GL_ARRAY_BUFFER, location=0)
+        uv_vbo = Buffer(uvs, GL_ARRAY_BUFFER, location=3)
+        ebo = Buffer(indices, GL_ELEMENT_ARRAY_BUFFER)
 
         positions, textures = Terrain.set_chunk()
 
-        instance_vbo = glGenBuffers(1)
-        glBindBuffer(GL_ARRAY_BUFFER, instance_vbo)
-        glBufferData(GL_ARRAY_BUFFER, positions, GL_STATIC_DRAW)
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, ctypes.c_void_p(0))
-        glEnableVertexAttribArray(1)
-        glVertexAttribDivisor(1, 1)
+        # Instancing buffers
+        ibo = Buffer(positions, GL_ARRAY_BUFFER, location=1, instancing=True)
+        tbo = Buffer(textures, GL_ARRAY_BUFFER, location=2, instancing=True)
 
-        texture_indices_vbo = glGenBuffers(1)
-        glBindBuffer(GL_ARRAY_BUFFER, texture_indices_vbo)
-        glBufferData(GL_ARRAY_BUFFER, textures, GL_STATIC_DRAW)
-        glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, 0, ctypes.c_void_p(0))
-        glEnableVertexAttribArray(2)
-        glVertexAttribDivisor(2, 1)
-        
         return vao, len(positions), texture_array

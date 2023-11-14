@@ -1,9 +1,0 @@
-class BufferManager:
-	def __init__(self) -> None:
-		...
-
-	def create_vertex_array_object():
-		...
-		
-	def create_vertex_buffer_object():
-		...
