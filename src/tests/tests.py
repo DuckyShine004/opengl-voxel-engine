@@ -48,26 +48,14 @@ class Tests:
         glBindVertexArray(vao)
 
         # Generate the vertex buffer object for OpenGL to use
-        vbo = Buffer()
-        vbo.bind_buffer_data(GL_ARRAY_BUFFER, vertices)
-        vbo.send_buffer_data(0, 3)
-
-        uv_vbo = Buffer()
-        uv_vbo.bind_buffer_data(GL_ARRAY_BUFFER, uvs)
-        uv_vbo.send_buffer_data(3, 2)
-
-        # Generate the element buffer object
-        ebo = Buffer()
-        ebo.bind_buffer_data(GL_ELEMENT_ARRAY_BUFFER, indices)
+        vbo = Buffer(vertices, GL_ARRAY_BUFFER, location=0)
+        uv_vbo = Buffer(uvs, GL_ARRAY_BUFFER, location=3)
+        ebo = Buffer(indices, GL_ELEMENT_ARRAY_BUFFER)
 
         positions, textures = Terrain.set_chunk()
 
-        ibo = Buffer()
-        ibo.bind_buffer_data(GL_ARRAY_BUFFER, positions)
-        ibo.send_buffer_data(1, 3, instancing=True)
+        # Instancing buffers
+        ibo = Buffer(positions, GL_ARRAY_BUFFER, location=1, instancing=True)
+        tbo = Buffer(textures, GL_ARRAY_BUFFER, location=2, instancing=True)
 
-        tbo = Buffer()
-        tbo.bind_buffer_data(GL_ARRAY_BUFFER, textures)
-        tbo.send_buffer_data(2, 1, instancing=True)
-        
         return vao, len(positions), texture_array
