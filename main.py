@@ -13,9 +13,10 @@ from OpenGL.GL import *
 
 from math import sin, cos
 
+from tests.tests import Tests
+
 from src.manager.shader_manager import ShaderManager
 from src.manager.texture_manager import TextureManager
-from tests.tests import Tests
 from src.camera.camera import Camera
 from src.manager.music_manager import MusicManager
 from src.manager.window_manager import WindowManager
