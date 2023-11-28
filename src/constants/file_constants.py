@@ -8,8 +8,11 @@ Attributes:
 """
 
 # Shader and Texture
-SHADER_LOCATION = "../shaders/"
-TEXTURE_LOCATION = "../data/textures/blocks/"
+SHADER_LOCATION = "shaders/"
+TEXTURE_LOCATION = "data/textures/blocks/"
 
 # Sound
-MUSIC_LOCATION = "../data/sounds/musics/game/"
+MUSIC_LOCATION = "data/sounds/musics/game/"
+
+# Profiling
+PROFILE_NAME = "profiling.prof"

@@ -6,21 +6,25 @@ import ctypes
 import numpy
 import glm
 import pygame
+import cProfile
+import pstats
 
 from OpenGL.GL import *
 
 from math import sin, cos
 
-from manager.shader_manager import ShaderManager
-from manager.texture_manager import TextureManager
 from tests.tests import Tests
-from camera.camera import Camera
-from manager.music_manager import MusicManager
-from manager.window_manager import WindowManager
 
-from constants.application_constants import BACKGROUND_COLOR
+from src.manager.shader_manager import ShaderManager
+from src.manager.texture_manager import TextureManager
+from src.camera.camera import Camera
+from src.manager.music_manager import MusicManager
+from src.manager.window_manager import WindowManager
 
-from constants.light_constants import (
+from src.constants.application_constants import BACKGROUND_COLOR
+from src.constants.file_constants import PROFILE_NAME
+
+from src.constants.light_constants import (
     MATERIAL_AMBIENCE,
     MATERIAL_DIFFUSE,
     MATERIAL_SPECULAR,
@@ -133,11 +137,8 @@ class App:
 
         glfw.destroy_window(self.__window)
         glfw.terminate()
-        exit(0)
 
-
-if __name__ == "__main__":
-    # Create the driver code
+def main() -> None:
     app = App()
 
     # Initialize the application
@@ -145,3 +146,11 @@ if __name__ == "__main__":
 
     # Run the application
     app.run()
+ 
+if __name__ == "__main__":
+    with cProfile.Profile() as profile:
+        main()
+
+    stats = pstats.Stats(profile)
+    stats.sort_stats(pstats.SortKey.TIME)
+    stats.dump_stats(filename=PROFILE_NAME)

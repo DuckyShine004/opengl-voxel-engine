@@ -9,9 +9,9 @@ import numpy
 
 from numba import njit
 
-from world.noise import get_noise_2d, get_noise_3d
+from src.world.noise import get_noise_2d, get_noise_3d
 
-from constants.shape_constants import (
+from src.constants.shape_constants import (
     CHUNK_SIZE,
     CHUNK_HEIGHT,
     FREQUENCY,
@@ -68,8 +68,8 @@ def _set_chunk() -> Tuple[numpy.ndarray, numpy.ndarray]:
 
     voxel_data = []
 
-    for x in range(CHUNK_SIZE):
-        for z in range(CHUNK_SIZE):
+    for x in range(CHUNK_SIZE * 4):
+        for z in range(CHUNK_SIZE * 4):
             dx = AMPLITUDE * (x / FREQUENCY)
             dz = AMPLITUDE * (z / FREQUENCY)
 
@@ -77,7 +77,7 @@ def _set_chunk() -> Tuple[numpy.ndarray, numpy.ndarray]:
 
             voxel_data.append(((x, y, z), 0))
 
-            for d in range(1):
+            for d in range(64):
                 dy = y - d - 1
 
                 if d <= 5:

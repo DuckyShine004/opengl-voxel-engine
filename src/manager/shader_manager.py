@@ -6,7 +6,7 @@ import glm
 
 from OpenGL.GL import *
 
-from constants.file_constants import SHADER_LOCATION
+from src.constants.file_constants import SHADER_LOCATION
 
 
 class ShaderManager:

@@ -88,7 +88,7 @@ CUBE_UVS = numpy.array(
 )
 
 # Chunk
-CHUNK_SIZE = 64
+CHUNK_SIZE = 16
 CHUNK_HEIGHT = 256
 
 # Noise

@@ -7,9 +7,9 @@ import glfw
 
 from math import sin, cos
 
-from utility.utility import Utility
+from src.utility.utility import Utility
 
-from constants.application_constants import (
+from src.constants.application_constants import (
     SCREEN_WIDTH,
     SCREEN_HEIGHT,
     CAMERA_SPEED,
@@ -23,7 +23,7 @@ from constants.application_constants import (
 )
 
 
-class Camera(object):
+class Camera:
 
     """A camera object that manages the camera properties."""
 
