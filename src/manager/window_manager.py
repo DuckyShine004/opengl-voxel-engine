@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import glfw
 
-from constants.application_constants import SCREEN_WIDTH, SCREEN_HEIGHT
+from src.constants.application_constants import SCREEN_WIDTH, SCREEN_HEIGHT
 
 
 class WindowManager:

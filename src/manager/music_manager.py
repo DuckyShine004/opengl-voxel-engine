@@ -6,7 +6,7 @@ import os
 import random
 import pygame
 
-from constants.file_constants import MUSIC_LOCATION
+from src.constants.file_constants import MUSIC_LOCATION
 
 
 class MusicManager:

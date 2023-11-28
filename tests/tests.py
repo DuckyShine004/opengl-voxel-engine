@@ -1,16 +1,17 @@
 import numpy
 import glm
+import random
 
 from OpenGL.GL import *
 
-from manager.texture_manager import TextureManager
-from constants.shape_constants import CUBE_VERTICES, CUBE_INDICES, CUBE_UVS
-import random
-from world.terrain import Terrain
-from constants.shape_constants import TEXTURE_WIDTH, TEXTURE_HEIGHT
-from utility.utility import Utility
+from src.manager.texture_manager import TextureManager
+from src.constants.shape_constants import CUBE_VERTICES, CUBE_INDICES, CUBE_UVS
 
-from utility.buffer import Buffer
+from src.world.terrain import Terrain
+from src.constants.shape_constants import TEXTURE_WIDTH, TEXTURE_HEIGHT
+from src.utility.utility import Utility
+
+from src.utility.buffer import Buffer
 
 class Tests:
     @staticmethod

@@ -8,8 +8,8 @@ from OpenGL.GL import *
 
 from PIL import Image
 
-from constants.file_constants import TEXTURE_LOCATION
-from constants.shape_constants import TEXTURE_WIDTH, TEXTURE_HEIGHT
+from src.constants.file_constants import TEXTURE_LOCATION
+from src.constants.shape_constants import TEXTURE_WIDTH, TEXTURE_HEIGHT
 
 
 class TextureManager:
