@@ -28,7 +28,7 @@ class Utility:
 
     @staticmethod
     def lerp(value: float, minimum: float, maximum: float) -> float:
-        """Lerps the given value between the two ranges: minimum and maximum.
+        """Lerps the given value between (or in relation to) the two ranges: minimum and maximum.
         
         Args:
             value (float): The value to be lerped.
@@ -43,7 +43,7 @@ class Utility:
     
     @staticmethod
     def inverse_lerp(value: float, minimum: float, maximum: float) -> float:
-        """Finds the location of the value between the two ranges: minimum and maximum.
+        """Finds the location of the value between (or in relation to) the two ranges: minimum and maximum.
         
         Args:
             value (float): The value to be found.
@@ -58,7 +58,7 @@ class Utility:
     
     @staticmethod
     def smoothstep(value : float, minimum: float, maximum: float) -> float:
-        """Smoothly lerps the givel value between the two ranges: minimum and maximum.
+        """Smoothly lerps the givel value between (or in relation to) the two ranges: minimum and maximum.
         
         Args:
             value (float): The value to be smoothstepped.
