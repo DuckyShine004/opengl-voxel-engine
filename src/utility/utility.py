@@ -42,6 +42,21 @@ class Utility:
         return minimum + (maximum - minimum) * value
     
     @staticmethod
+    def inverse_lerp(value: float, minimum: float, maximum: float) -> float:
+        """Finds the location of the value between the two ranges: minimum and maximum.
+        
+        Args:
+            value (float): The value to be found.
+            minimum (float): The lower bound.
+            maximum (float): The upper bound.
+        
+        Returns:
+            float: The found value.
+        """
+
+        return (value - minimum) / (maximum - minimum)
+    
+    @staticmethod
     def smoothstep(value : float, minimum: float, maximum: float) -> float:
         """Smoothly lerps the givel value between the two ranges: minimum and maximum.
         
